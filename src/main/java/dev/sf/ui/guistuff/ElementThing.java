@@ -1,4 +1,4 @@
-package org.example.guistuff;
+package dev.sf.ui.guistuff;
 
 import org.rusherhack.client.api.ui.ElementBase;
 

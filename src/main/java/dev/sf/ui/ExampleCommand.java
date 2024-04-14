@@ -1,8 +1,5 @@
-package org.example;
+package dev.sf.ui;
 
-import org.example.guistuff.MainTheme;
-import org.rusherhack.client.api.IRusherHack;
-import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.command.Command;
 import org.rusherhack.core.command.annotations.CommandExecutor;
 

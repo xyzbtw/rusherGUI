@@ -1,13 +1,8 @@
-package org.example.guistuff;
+package dev.sf.ui.guistuff;
 
-import net.minecraft.client.gui.Font;
-import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
-import org.rusherhack.client.api.render.font.IFontRenderer;
 import org.rusherhack.client.api.ui.panel.PanelHandlerBase;
-
-import java.awt.*;
 
 public class PanelThing extends PanelHandlerBase<ElementThing> {
     public PanelThing(boolean scaledWithMinecraftGui) {
@@ -16,7 +11,6 @@ public class PanelThing extends PanelHandlerBase<ElementThing> {
 
     @Override
     public void initialize() {
-        System.out.println("initialized ASDYDYASSDDSA");
         addPanel(new PanelItemThing());
     }
 

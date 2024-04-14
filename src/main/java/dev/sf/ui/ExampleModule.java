@@ -1,4 +1,4 @@
-package org.example;
+package dev.sf.ui;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

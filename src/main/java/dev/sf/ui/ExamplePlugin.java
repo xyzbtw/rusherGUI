@@ -1,6 +1,8 @@
-package org.example;
+package dev.sf.ui;
 
-import org.example.guistuff.MainTheme;
+import com.mojang.blaze3d.systems.RenderSystem;
+import dev.sf.ui.guistuff.MainTheme;
+import dev.sf.ui.utils.shaders.Shaders;
 import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.plugin.Plugin;
 
@@ -11,10 +13,11 @@ import org.rusherhack.client.api.plugin.Plugin;
  */
 public class ExamplePlugin extends Plugin {
 	public static MainTheme theme = new MainTheme();
-	
+
 	@Override
 	public void onLoad() {
 		RusherHackAPI.getThemeManager().registerTheme(theme);
+		RenderSystem.recordRenderCall(() -> Shaders.init());
 	}
 	
 	@Override

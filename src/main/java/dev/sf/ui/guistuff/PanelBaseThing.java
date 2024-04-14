@@ -1,6 +1,6 @@
-package org.example.guistuff;
+package dev.sf.ui.guistuff;
 
-import org.example.ExamplePlugin;
+import dev.sf.ui.ExamplePlugin;
 import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
