@@ -1,5 +1,5 @@
 {
-  "Plugin-Class": "org.example.ExamplePlugin",
+  "Plugin-Class": "org.example.theme.ExamplePlugin",
   "Name": "Example Plugin",
   "Version": "${plugin_version}",
   "Description": "Example rusherhack plugin",
