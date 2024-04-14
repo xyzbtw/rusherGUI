@@ -97,7 +97,7 @@ public class ExampleModule extends ToggleableModule {
 		renderer.begin(event.getMatrixStack(), fontRenderer);
 		
 		//draw stuff
-		renderer.drawRectangle(100, 100 + this.exampleDouble.getValue(), 100, 100, this.exampleColor.getValueRGB());
+				renderer.drawRectangle(100, 100 + this.exampleDouble.getValue(), 100, 100, this.exampleColor.getValueRGB());
 		fontRenderer.drawString(this.exampleString.getValue(), 110, 110, Color.WHITE.getRGB());
 		
 		//end renderer

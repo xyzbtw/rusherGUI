@@ -30,8 +30,6 @@ public class ExampleCommand extends Command {
 	@CommandExecutor
 	private String example() {
 		//when return type is String you return the message you want to return to the user
-		RusherHackAPI.getThemeManager().registerTheme(new MainTheme() {
-		});
 		return "Hello World!";
 	}
 	
