@@ -1,25 +1,22 @@
-package dev.sf.ui.guistuff;
+package org.example.theme;
 
 import org.jetbrains.annotations.Nullable;
 import org.rusherhack.client.api.setting.ColorSetting;
 import org.rusherhack.client.api.ui.panel.PanelHandlerBase;
 import org.rusherhack.client.api.ui.theme.ITheme;
-import org.rusherhack.core.setting.NumberSetting;
 import org.rusherhack.core.setting.Setting;
-import org.rusherhack.core.setting.StringSetting;
 
 import java.awt.*;
 import java.util.List;
 
-public class MainTheme implements ITheme {
+public class Theme implements ITheme {
+    public ColorSetting colorSetting = new ColorSetting("TestColor", new Color(148, 141, 252));
+    public ColorSetting fontColor = new ColorSetting("FontColor", new Color(148, 141, 252));
 
-
+    @Override
     public @Nullable PanelHandlerBase<?> getClickGuiHandler() {
-        return new PanelThing(true);
+        return new ClickGUIHandler(true);
     }
-    public ColorSetting colorSetting = new ColorSetting("Color Setting", new Color(0, 0, 0, 0));
-    public Setting<String> stringSetting = new StringSetting("String Setting", "default");
-    public Setting<Integer> integerSetting = new NumberSetting<>("Integer Setting", "das", 5, 0, 5);
 
     @Override
     public ColorSetting getColorSetting() {
@@ -29,19 +26,18 @@ public class MainTheme implements ITheme {
     @Override
     public List<Setting<?>> getSettings() {
         return List.of(
-                stringSetting,
                 colorSetting,
-                integerSetting
+                fontColor
         );
     }
 
     @Override
     public String getDescription() {
-        return "thisad";
+        return "Funny theme";
     }
 
     @Override
     public String getName() {
-        return "xyzthemething";
+        return "TestTHEME";
     }
 }

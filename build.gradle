@@ -40,6 +40,11 @@ dependencies {
 		officialMojangMappings()
 		parchment("org.parchmentmc.data:parchment-1.20.1:2023.07.30@zip")
 	}
+	annotationProcessor 'org.projectlombok:lombok:1.18.30'
+	implementation('org.projectlombok:lombok:1.18.30')
+
+	testCompileOnly 'org.projectlombok:lombok:1.18.30'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 	
 	//rusherhack api
 	rusherhackApi "org.rusherhack:rusherhack-api:$minecraft_version-SNAPSHOT"
