@@ -74,14 +74,12 @@ public class ModuleItem extends ElementBase implements IPanelItem {
         final IFontRenderer fontRenderer = renderer.getFontRenderer();
         possibleHeightUpdate();
 
-
         if(module instanceof ToggleableModule){
             renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(false),
                     ((ToggleableModule) module).isToggled()
                             ? ExamplePlugin.theme.getColorSetting().getValue().getRGB()
                             : ExamplePlugin.theme.backColor.getValueRGB());
-        }else
-            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(false), ExamplePlugin.theme.backColor.getValueRGB());
+        }
 
         fontRenderer.drawString(module.getName(), getX() + 3.5f, (panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight(false)) ? getY() : 1F + getY()), ExamplePlugin.theme.fontColor.getValue().getRGB());
 
@@ -96,10 +94,7 @@ public class ModuleItem extends ElementBase implements IPanelItem {
                 height += subItem.getHeight(false) + 0.5F;
             }
             renderer.getMatrixStack().popPose();
-
         }
-
-        renderer.endScissor();
 
         if(panel.isHovering(mouseX,mouseY, getX(), getY(), getWidth(), getHeight(false))) {
             renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(false), new Color(0, 0, 0, 50).getRGB());
@@ -113,8 +108,8 @@ public class ModuleItem extends ElementBase implements IPanelItem {
 
     }
     public void drawDesc(IRenderer2D mesh2D, double x, double y, String text) {
-//        mesh2D.getMatrixStack().pushPose();
-//        mesh2D.getMatrixStack().translate(0F, 0F, 200F);
+        mesh2D.getMatrixStack().pushPose();
+        mesh2D.getMatrixStack().translate(0F, 0F, 200F);
         IFontRenderer fontRenderer = RusherHackAPI.fonts().getFontRenderer();
         List<Tuple<Float, String>> pairs = new ArrayList<>();
         String[] lines = text.split("\n");
@@ -133,6 +128,7 @@ public class ModuleItem extends ElementBase implements IPanelItem {
         for (Tuple<Float, String> pair : pairs) {
             fontRenderer.drawString(pair.getB(), x0, y + pair.getA() - 1F, ExamplePlugin.theme.fontColor.getValue().getRGB());
         }
+        mesh2D.getMatrixStack().popPose();
     }
 
     @Override

@@ -33,8 +33,7 @@ public class Panel extends PanelBase<IPanelItem> {
     private double modulesHeight;
     private double diffX;
     private double diffY;
-    private double scrollHeight;
-    private double scrollAmount;
+
 
     @Setter
     @Getter
@@ -45,8 +44,6 @@ public class Panel extends PanelBase<IPanelItem> {
     @Setter
     @Getter
     private double prevY;
-    private double renderX;
-    private double renderY;
     private double renderYModule;
     @Setter
     private boolean open = true, drag = false;
@@ -60,25 +57,8 @@ public class Panel extends PanelBase<IPanelItem> {
             setX(mouseX + diffX);
             setY(mouseY + diffY);
         }
-        float diffScroll = (float) Math.max(-(getHeight() - scrollHeight), 0);
-
-        if (getScroll() + scrollAmount >= -diffScroll && getScroll() + scrollHeight + scrollAmount <= getHeight() + diffScroll) {
-            setScroll(getScroll() + scrollAmount);
-        }
-
-        if (getScroll() + scrollAmount < -diffScroll) {
-            setScroll(-diffScroll);
-        }
-
-        if (getScroll() + scrollHeight + scrollAmount > getHeight() + diffScroll) {
-            setScroll((float) (getHeight() + diffScroll - scrollHeight));
-        }
-        scrollAmount = 0;
-        setRenderYModule(scroll);
-        setRenderY(getY());
-        setRenderX(getX());
-        double x = getRenderX();
-        double y = getRenderY();
+        double x = getX();
+        double y = getY();
         final IRenderer2D renderer = RusherHackAPI.getRenderer2D();
         double height = this.getHeight();
         renderer.drawRectangle(x, y - 14.5f, getWidth(),16f, new Color(0, 0, 0, 100).getRGB());
@@ -88,13 +68,11 @@ public class Panel extends PanelBase<IPanelItem> {
 
         if(open) {
             if (height > 0) {
-                renderer.drawOutlinedRectangle(x, y, getWidth(), height + 1.5F, 1,
+                renderer.drawOutlinedRectangle(x, y + 16F, getWidth(), height + 1.5F - 16F, ExamplePlugin.theme.outlineWidth.getValue(),
                         ExamplePlugin.theme.backColor.getValueRGB(),
                         ExamplePlugin.theme.outlineColor.getValueRGB());
             }
-            //renderer.beginScissor();
-            //renderer.scissorBox(x, y, x + getWidth(), y + height);
-            double y0 = y + getRenderYModule() + 1.5F;
+            double y0 = y + 1.5F;
             if (height > 0) {
                 for (ModuleItem frame : moduleItems) {
                     frame.setX(x);
@@ -106,7 +84,6 @@ public class Panel extends PanelBase<IPanelItem> {
                 modulesHeight = y0;
 
             }
-           // renderer.endScissor();
         }
     }
 
@@ -152,7 +129,11 @@ public class Panel extends PanelBase<IPanelItem> {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         if(isHovering(mouseX, mouseY, getX(), getY() - 14.5F, getWidth(), getHeight())) {
-            scrollAmount = delta;
+            if(scroll >= 0) {
+                setY(getY() + ExamplePlugin.theme.scrollSpeed.getValue());
+            } else {
+                setY(getY() - ExamplePlugin.theme.scrollSpeed.getValue());
+            }
         }
         return false;
     }
@@ -177,9 +158,9 @@ public class Panel extends PanelBase<IPanelItem> {
     }
     public void setModuleItems(List<ModuleItem> moduleFrames) {
         this.moduleItems = moduleFrames;
-        scrollHeight = (float) (getModuleItems().stream()
-                .mapToDouble(frame -> frame.getHeight(false) + .5)
-                .sum());
+//        scrollHeight = (float) (getModuleItems().stream()
+//                .mapToDouble(frame -> frame.getHeight(false) + .5)
+//                .sum());
     }
     public void setRenderYModule(double y) {
         if (this.renderYModule == y) return;
@@ -188,36 +169,12 @@ public class Panel extends PanelBase<IPanelItem> {
     }
 
     public double getRenderYModule() {
-//        if (ExamplePlugin.handler.fpsManager.getFPS() < 20) {
-//            return renderYModule;
-//        }
-//        renderYModule = prevYModule + (renderYModule - prevYModule) * mc.getDeltaFrameTime() / (8 * (Math.min(240, ExamplePlugin.handler.fpsManager.getFPS()) / 240f));
+        if (mc.getFps() < 20) {
+            return renderYModule;
+        }
+        renderYModule = prevYModule + (renderYModule - prevYModule) * mc.getDeltaFrameTime() / (8 * (Math.min(240, mc.getFps()) / 240f));
         return renderYModule;
     }
 
-    public void setRenderX(double x) {
-        if (this.renderX == x) return;
-        prevX = this.renderX;
-        this.renderX = x;
-    }
 
-    public double getRenderX() {
-       // renderX = prevX + (renderX - prevX) * mc.getDeltaFrameTime() / (8 * (Math.min(240, ExamplePlugin.handler.fpsManager.getFPS()) / 240f));
-        return renderX;
-    }
-
-    public void setRenderY(double y) {
-        if (this.renderY == y) return;
-        prevY = this.renderY;
-        this.renderY = y;
-    }
-
-
-    public double getRenderY() {
-//        if (ExamplePlugin.handler.fpsManager.getFPS() < 20) {
-//            return renderY;
-//        }
-//        renderY = prevY + (renderY - prevY) * mc.getDeltaFrameTime() / (8 * (Math.min(240, ExamplePlugin.handler.fpsManager.getFPS()) / 240f));
-        return renderY;
-    }
 }
