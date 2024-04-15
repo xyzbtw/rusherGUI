@@ -41,7 +41,7 @@ public class ModuleItem extends ElementBase implements IPanelItem {
 
         addSettingItems(module.getSettings());
 
-        rendererHeight = 11F;
+        rendererHeight = 13F;
         prevHeight = (float) (subItems.stream()
                 .filter(IPanelItem::isVisible)
                 .mapToDouble(frame -> frame.getHeight(true) + .5)
@@ -54,12 +54,13 @@ public class ModuleItem extends ElementBase implements IPanelItem {
 
     @Override
     public double getHeight() {
-        return prevHeight + (rendererHeight - prevHeight);
+        return rendererHeight;
     }
 
     @Override
     public double getHeight(boolean total) {
-        return prevHeight + (rendererHeight - prevHeight);
+        if(total) return rendererHeight;
+        return 13f;
     }
 
     @Override
@@ -75,14 +76,14 @@ public class ModuleItem extends ElementBase implements IPanelItem {
 
 
         if(module instanceof ToggleableModule){
-            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(true),
+            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(false),
                     ((ToggleableModule) module).isToggled()
                             ? ExamplePlugin.theme.getColorSetting().getValue().getRGB()
                             : ExamplePlugin.theme.backColor.getValueRGB());
         }else
-            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(true), ExamplePlugin.theme.backColor.getValueRGB());
+            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(false), ExamplePlugin.theme.backColor.getValueRGB());
 
-        fontRenderer.drawString(module.getName(), getX() + 3.5f, (panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight()) ? getY() : 1F + getY()), ExamplePlugin.theme.fontColor.getValue().getRGB());
+        fontRenderer.drawString(module.getName(), getX() + 3.5f, (panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight(false)) ? getY() : 1F + getY()), ExamplePlugin.theme.fontColor.getValue().getRGB());
 
         if(!subItems.isEmpty() && open) {
             renderer.getMatrixStack().pushPose();
@@ -92,7 +93,7 @@ public class ModuleItem extends ElementBase implements IPanelItem {
                 subItem.setY(getY() + height);
 
                 subItem.render(context, mouseX, mouseY);
-                height += subItem.getHeight() + 0.5F;
+                height += subItem.getHeight(false) + 0.5F;
             }
             renderer.getMatrixStack().popPose();
 
@@ -100,8 +101,8 @@ public class ModuleItem extends ElementBase implements IPanelItem {
 
         renderer.endScissor();
 
-        if(panel.isHovering(mouseX,mouseY, getX(), getY(), getWidth(), getHeight())) {
-            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(true), new Color(0, 0, 0, 50).getRGB());
+        if(panel.isHovering(mouseX,mouseY, getX(), getY(), getWidth(), getHeight(false))) {
+            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(false), new Color(0, 0, 0, 50).getRGB());
             String description =
                     (module.getDescription().isEmpty() ?
                             "A " + module.getCategory() +" Module." + ChatFormatting.GREEN + " Name" + ChatFormatting.RESET + " «" +  module.getName() + "»."
@@ -136,12 +137,12 @@ public class ModuleItem extends ElementBase implements IPanelItem {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == GLFW.GLFW_MOUSE_BUTTON_1 && panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight())) {
+        if (button == GLFW.GLFW_MOUSE_BUTTON_1 && panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight(false))) {
             if(module instanceof ToggleableModule){
                 ((ToggleableModule) module).toggle();
             }
         }
-        if (button == GLFW.GLFW_MOUSE_BUTTON_2 && panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight())) {
+        if (button == GLFW.GLFW_MOUSE_BUTTON_2 && panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight(false))) {
             this.open = !this.open;
             possibleHeightUpdate();
         }
@@ -163,19 +164,10 @@ public class ModuleItem extends ElementBase implements IPanelItem {
         return false;
     }
     protected void possibleHeightUpdate() {
-        double temp;
+        double temp = 13f;
         if (open)
-            temp = (float) (subItems.stream()
-                    .mapToDouble(ExtendableItem::getHeight/* + .5*/)
-                    .sum() + getHeight());
-        else {
-            temp = getHeight();
-        }
-        if (this.rendererHeight == temp){
-            return;
-        }
-        prevHeight = this.rendererHeight;
-        this.rendererHeight = temp;
+            temp += subItems.stream().mapToDouble(i -> i.getHeight(true) + 0.5f).sum();
+        rendererHeight = temp;
     }
     public void addSettingItems(List<Setting<?>> settings) {
         for(Setting<?> setting : settings) {

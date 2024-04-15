@@ -97,7 +97,7 @@ public class Panel extends PanelBase<IPanelItem> {
                 for (ModuleItem frame : moduleItems) {
                     frame.setX(x);
                     frame.setY(y0);
-                    y0 += (frame.getHeight(false) + .5F);
+                    y0 += (frame.getHeight(true) + .5F);
                     frame.render(context, mouseX, mouseY);
                 }
 
@@ -118,7 +118,7 @@ public class Panel extends PanelBase<IPanelItem> {
     public double getHeight() {
         double i = 16f;
         for(ModuleItem item : moduleItems){
-            i += item.getHeight();
+            i += item.getHeight(true);
         }
         return i;
     }

@@ -55,10 +55,21 @@ public class BooleanItem extends ExtendableItem {
                 ? ExamplePlugin.theme.getColorSetting().getValue().getRGB()
                 : new Color(0, 0, 0, 50).getRGB());
 
+        renderer.getFontRenderer().drawString(setting.getName(), getX() + 1, getY(), ExamplePlugin.theme.fontColor.getValueRGB());
+
+        if(panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight())) {
+            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), new Color(0, 0, 0, 100).getRGB());
+        }
+
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if(button == 0){
+            if(panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight())) {
+                setting.setValue(!setting.getValue());
+            }
+        }
         return false;
     }
 
