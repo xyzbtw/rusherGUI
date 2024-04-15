@@ -15,17 +15,13 @@ import java.util.ArrayList;
 
 public class BooleanItem extends ExtendableItem {
     public BooleanItem(IModule module, Panel panel, ModuleItem parent, BooleanSetting setting) {
-        super(parent);
-        this.parent = parent;
-        this.module = module;
+        super(parent, module, panel, setting);
         this.panel = panel;
+        this.module = module;
         this.setting = setting;
     }
     Panel panel;
     IModule module;
-    ModuleItem parent;
-    private final ArrayList<IPanelItem> subItems = new ArrayList<>();
-    private double prevHeight, rendererHeight;
     BooleanSetting setting;
     @Override
     public double getWidth() {
@@ -35,6 +31,10 @@ public class BooleanItem extends ExtendableItem {
     @Override
     public double getHeight(boolean total) {
         return 11;
+    }
+    @Override
+    public double getX(){
+        return super.getX() + 1.5;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class BooleanItem extends ExtendableItem {
             renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), new Color(0, 0, 0, 100).getRGB());
         }
 
-        renderer.getFontRenderer().drawString(setting.getName(), getX() + 1, getY(), ExamplePlugin.theme.fontColor.getValueRGB());
+        renderer.getFontRenderer().drawString(setting.getName(), getX() + 1, getY() + 2.5, ExamplePlugin.theme.fontColor.getValueRGB());
 
     }
 

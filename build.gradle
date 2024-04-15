@@ -92,6 +92,16 @@ processResources {
 		expand(plugin_version: project.plugin_version)
 	}
 }
+tasks.register("moveJar", Exec){
+	dependsOn 'build'
+	commandLine 'cmd',
+			'/c',
+			'copy',
+			'/Y',
+			'build\\libs\\rushergui-1.0.0.jar',
+			'C:\\Users\\xyzbtw\\AppData\\Roaming\\PrismLauncher\\instances\\1.20.1 test\\.minecraft\\rusherhack\\plugins'
+	println "Copied jar file to destination folder with replacement"
+}
 
 jar {
 	manifest {

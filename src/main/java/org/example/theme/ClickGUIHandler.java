@@ -15,7 +15,6 @@ public class ClickGUIHandler extends PanelHandlerBase<ElementBase> {
         super(scaledWithMinecraftGui);
     }
     private double x1;
-    FpsManager fpsManager = new FpsManager();
 
     @Override
     public void initialize() {
@@ -55,7 +54,6 @@ public class ClickGUIHandler extends PanelHandlerBase<ElementBase> {
             addPanel(pluginPanel);
         }
 
-        RusherHackAPI.getEventBus().subscribe(fpsManager);
 
     }
 

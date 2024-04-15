@@ -33,7 +33,7 @@ public class ModuleItem extends ElementBase implements IPanelItem {
     Panel panel;
     public boolean open = false;
     private final ArrayList<ExtendableItem> subItems = new ArrayList<>();
-    private double prevHeight, rendererHeight;
+    private double rendererHeight;
 
     public ModuleItem(IModule module, Panel panel){
         this.module = module;
@@ -41,11 +41,11 @@ public class ModuleItem extends ElementBase implements IPanelItem {
 
         addSettingItems(module.getSettings());
 
-        rendererHeight = 13F;
-        prevHeight = (float) (subItems.stream()
-                .filter(IPanelItem::isVisible)
-                .mapToDouble(frame -> frame.getHeight(true) + .5)
-                .sum() + getHeight(false));
+        rendererHeight = 11F;
+    }
+    @Override
+    public double getX() {
+        return panel.getX() + 1;
     }
     @Override
     public double getWidth() {
@@ -60,7 +60,7 @@ public class ModuleItem extends ElementBase implements IPanelItem {
     @Override
     public double getHeight(boolean total) {
         if(total) return rendererHeight;
-        return 13f;
+        return 11f;
     }
 
     @Override
@@ -71,27 +71,30 @@ public class ModuleItem extends ElementBase implements IPanelItem {
     @Override
     public void render(RenderContext context, double mouseX, double mouseY) {
         final IRenderer2D renderer = RusherHackAPI.getRenderer2D();
-        final IFontRenderer fontRenderer = renderer.getFontRenderer();
+        final IFontRenderer fontRenderer = RusherHackAPI.fonts().getFontRenderer();
         possibleHeightUpdate();
 
         if(module instanceof ToggleableModule){
-            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(false),
-                    ((ToggleableModule) module).isToggled()
-                            ? ExamplePlugin.theme.getColorSetting().getValue().getRGB()
-                            : ExamplePlugin.theme.backColor.getValueRGB());
+            if(((ToggleableModule) module).isToggled())
+                renderer.drawOutlinedRectangle(getX(), getY(), getWidth(), getHeight(false), 3, ExamplePlugin.theme.getColorSetting().getValue().getRGB(), ExamplePlugin.theme.moduleOutlineColor.getValueRGB());
+        }
+        else{
+            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(false), ExamplePlugin.theme.getColorSetting().getValue().getRGB());
         }
 
-        fontRenderer.drawString(module.getName(), getX() + 3.5f, (panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight(false)) ? getY() : 1F + getY()), ExamplePlugin.theme.fontColor.getValue().getRGB());
+
 
         if(!subItems.isEmpty() && open) {
             renderer.getMatrixStack().pushPose();
-            double height = 13f;
+            double height = 11.5f;
             for (ExtendableItem subItem : subItems) {
+                if(subItem.setting.isHidden()) continue;
+
                 subItem.setX(getX());
                 subItem.setY(getY() + height);
 
                 subItem.render(context, mouseX, mouseY);
-                height += subItem.getHeight(false) + 0.5F;
+                height += subItem.getHeight(true) + 0.5F;
             }
             renderer.getMatrixStack().popPose();
         }
@@ -106,6 +109,7 @@ public class ModuleItem extends ElementBase implements IPanelItem {
             drawDesc(renderer, mouseX + 8,mouseY + 8, description);
         }
 
+        fontRenderer.drawString(module.getName(), getX() + 3.5f, (panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight(false)) ? getY() + 1f : 2.5F + getY()), ExamplePlugin.theme.fontColor.getValue().getRGB());
     }
     public void drawDesc(IRenderer2D mesh2D, double x, double y, String text) {
         mesh2D.getMatrixStack().pushPose();
@@ -133,6 +137,7 @@ public class ModuleItem extends ElementBase implements IPanelItem {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if(open) subItems.forEach(frame -> frame.mouseClicked(mouseX, mouseY, button));
         if (button == GLFW.GLFW_MOUSE_BUTTON_1 && panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight(false))) {
             if(module instanceof ToggleableModule){
                 ((ToggleableModule) module).toggle();
@@ -147,22 +152,25 @@ public class ModuleItem extends ElementBase implements IPanelItem {
 
     @Override
     public void mouseReleased(double mouseX, double mouseY, int button) {
+        if(open) subItems.forEach(frame -> frame.mouseReleased(mouseX, mouseY, button));
         IPanelItem.super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
     public boolean charTyped(char character) {
+        if(open) subItems.forEach(frame -> frame.charTyped(character));
         return false;
     }
 
     @Override
     public boolean keyTyped(int key, int scanCode, int modifiers) {
+        if(open) subItems.forEach(frame -> frame.keyTyped(key, scanCode, modifiers));
         return false;
     }
     protected void possibleHeightUpdate() {
         double temp = 13f;
         if (open)
-            temp += subItems.stream().mapToDouble(i -> i.getHeight(true) + 0.5f).sum();
+            temp += subItems.stream().mapToDouble(i -> i.setting.isHidden() ? 0 : (i.getHeight(true) + 0.5f)).sum();
         rendererHeight = temp;
     }
     public void addSettingItems(List<Setting<?>> settings) {
@@ -170,22 +178,26 @@ public class ModuleItem extends ElementBase implements IPanelItem {
             if(setting instanceof BooleanSetting) {
                 this.addSubItem(new BooleanItem(this.module, this.panel, this, (BooleanSetting) setting));
             }
-
-//            } else if(setting instanceof NumberSetting<?>) {
-//                this.addSubItem(new ClassicSliderItem(this.getPanel(), this, (NumberSetting<?>) setting));
-//            } else if(setting instanceof EnumSetting<?>) {
-//                this.addSubItem(new ClassicOptionsItem(this.getPanel(), this, (EnumSetting<?>) setting));
-//            } else if(setting instanceof StringSetting) {
-//                //string settings can either act like enum settings, or be configurable strings
-//                if(!((StringSetting) setting).getOptions().isEmpty()) {
-//                    this.addSubItem(new ClassicOptionsItem(this.getPanel(), this, (StringSetting) setting));
-//                } else {
-//                    this.addSubItem(new ClassicStringItem(this.getPanel(), this, (StringSetting) setting));
-//                }
+            else if(setting instanceof StringSetting) {
+                //string settings can either act like enum settings, or be configurable strings
+                if (!((StringSetting) setting).getOptions().isEmpty()) {
+                    this.addSubItem(new EnumItem(this, module, panel, setting));
+                } else {
+                    this.addSubItem(new StringItem(this, module, panel, setting));
+                }
+            }
+            else if(setting instanceof EnumSetting<?>){
+                this.addSubItem(new EnumItem(this, module, panel, setting));
+            }
+            else if(setting instanceof BindSetting){
+                System.out.println("registered bindsetting for module " + module.getName());
+                this.addSubItem(new BindItem(this, module, panel, setting));
+            }
+            else if(setting instanceof NumberSetting<?>){
+                this.addSubItem(new NumberItem(this, module, panel, setting));
+            }
 //            } else if(setting instanceof ColorSetting) {
 //                this.addSubItem(new ClassicColorItem(this.getPanel(), this, (ColorSetting) setting));
-//            } else if(setting instanceof BindSetting) {
-//                this.addSubItem(new ClassicBindItem(this.getPanel(), this, (BindSetting) setting));
 //            } else if(setting instanceof NullSetting) {
 //                this.addSubItem(new ClassicSettingItem<>(this.getPanel(), this, (NullSetting) setting));
 //            }

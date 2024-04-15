@@ -11,6 +11,7 @@ import org.rusherhack.client.api.ui.ElementHandlerBase;
 import org.rusherhack.client.api.ui.panel.IPanelItem;
 import org.rusherhack.client.api.ui.panel.PanelBase;
 import org.rusherhack.client.api.ui.panel.PanelHandlerBase;
+import org.rusherhack.core.animation.Animation;
 
 import java.awt.*;
 import java.util.List;
@@ -47,6 +48,10 @@ public class Panel extends PanelBase<IPanelItem> {
     private double renderYModule;
     @Setter
     private boolean open = true, drag = false;
+    //        scrollHeight = (float) (getModuleItems().stream()
+    //                .mapToDouble(frame -> frame.getHeight(false) + .5)
+    //                .sum());
+    @Setter
     @Getter
     private List<ModuleItem> moduleItems;
     private final String category;
@@ -63,7 +68,7 @@ public class Panel extends PanelBase<IPanelItem> {
         double height = this.getHeight();
         renderer.drawRectangle(x, y - 14.5f, getWidth(),14.5, new Color(0, 0, 0, 100).getRGB());
         double offsetX = (getWidth() - renderer.getFontRenderer().getStringWidth(category)) / 2F;
-        renderer.getFontRenderer().drawString(category, x + offsetX, y - 15 + 2.5F, ExamplePlugin.theme.fontColor.getValue().getRGB());
+        renderer.getFontRenderer().drawString(category, x + offsetX, y - 6 - 2.5F, ExamplePlugin.theme.fontColor.getValue().getRGB());
 
 
         if(open) {
@@ -77,12 +82,9 @@ public class Panel extends PanelBase<IPanelItem> {
                 for (ModuleItem frame : moduleItems) {
                     frame.setX(x);
                     frame.setY(y0);
-                    y0 += (frame.getHeight(true) + .5F);
                     frame.render(context, mouseX, mouseY);
+                    y0 += (frame.getHeight(true) + .2F);
                 }
-
-                modulesHeight = y0;
-
             }
         }
     }
@@ -94,9 +96,9 @@ public class Panel extends PanelBase<IPanelItem> {
 
     @Override
     public double getHeight() {
-        double i = 16f;
+        double i = 0;
         for(ModuleItem item : moduleItems){
-            i += item.getHeight(true);
+            i += item.getHeight(true) + 0.2F;
         }
         return i;
     }
@@ -156,12 +158,7 @@ public class Panel extends PanelBase<IPanelItem> {
         if (open) moduleItems.forEach(frame -> frame.keyTyped(key, scanCode, modifiers));
         return false;
     }
-    public void setModuleItems(List<ModuleItem> moduleFrames) {
-        this.moduleItems = moduleFrames;
-//        scrollHeight = (float) (getModuleItems().stream()
-//                .mapToDouble(frame -> frame.getHeight(false) + .5)
-//                .sum());
-    }
+
     public void setRenderYModule(double y) {
         if (this.renderYModule == y) return;
         prevYModule = this.renderYModule;
