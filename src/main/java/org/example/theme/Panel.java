@@ -85,12 +85,14 @@ public class Panel extends PanelBase<IPanelItem> {
         double offsetX = (getWidth() - renderer.getFontRenderer().getStringWidth(category)) / 2F;
         renderer.getFontRenderer().drawString(category, x + offsetX, y - 15 + 2.5F, ExamplePlugin.theme.fontColor.getValue().getRGB());
 
+
         if(open) {
             if (height > 0) {
                 renderer.drawOutlinedRectangle(x, y, getWidth(), height + 1.5F, 1,
                         ExamplePlugin.theme.backColor.getValueRGB(),
                         ExamplePlugin.theme.outlineColor.getValueRGB());
             }
+            //renderer.beginScissor();
             //renderer.scissorBox(x, y, x + getWidth(), y + height);
             double y0 = y + getRenderYModule() + 1.5F;
             if (height > 0) {
@@ -104,9 +106,8 @@ public class Panel extends PanelBase<IPanelItem> {
                 modulesHeight = y0;
 
             }
+           // renderer.endScissor();
         }
-
-        //renderer.endScissor();
     }
 
     @Override
