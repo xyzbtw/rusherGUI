@@ -129,7 +129,7 @@ public class Panel extends PanelBase<IPanelItem> {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         //if(isHovering(mouseX, mouseY, getX(), getY() - 14.5F, getWidth(), getHeight())) {
-            if(scroll >= 0) {
+            if(delta >= 0) {
                 setY(getY() + ExamplePlugin.theme.scrollSpeed.getValue());
             } else {
                 setY(getY() - ExamplePlugin.theme.scrollSpeed.getValue());
