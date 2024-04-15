@@ -15,7 +15,7 @@ public class Theme implements ITheme {
 
     @Override
     public @Nullable PanelHandlerBase<?> getClickGuiHandler() {
-        return new ClickGUIHandler(true);
+        return ExamplePlugin.handler;
     }
 
     @Override

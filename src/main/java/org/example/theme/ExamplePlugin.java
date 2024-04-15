@@ -10,9 +10,11 @@ import org.rusherhack.client.api.plugin.Plugin;
  */
 public class ExamplePlugin extends Plugin {
 	public static Theme theme = new Theme();
+	public static ClickGUIHandler handler;
 	
 	@Override
 	public void onLoad() {
+		handler = new ClickGUIHandler(true);
 		RusherHackAPI.getThemeManager().registerTheme(theme);
 	}
 	

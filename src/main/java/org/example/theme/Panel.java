@@ -7,6 +7,7 @@ import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.module.ModuleCategory;
 import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
+import org.rusherhack.client.api.ui.ElementHandlerBase;
 import org.rusherhack.client.api.ui.panel.IPanelItem;
 import org.rusherhack.client.api.ui.panel.PanelBase;
 import org.rusherhack.client.api.ui.panel.PanelHandlerBase;
@@ -18,8 +19,8 @@ import static org.rusherhack.client.api.Globals.mc;
 
 
 public class Panel extends PanelBase<IPanelItem> {
-    public Panel(PanelHandlerBase handler, ModuleCategory category, double x, double y) {
-        super(handler, category.getName());
+    public Panel(PanelHandlerBase handler, String category, double x, double y) {
+        super(handler, category);
         this.category = category;
         setX(x);
         setY(y);
@@ -51,12 +52,10 @@ public class Panel extends PanelBase<IPanelItem> {
     private boolean open = true, drag = false;
     @Getter
     private List<ModuleItem> moduleItems;
-    private final ModuleCategory category;
+    private final String category;
 
     @Override
     public void render(RenderContext context, double mouseX, double mouseY) {
-        System.out.println("Rendering panel " + this.getName() + " with " + moduleItems.size() + " items");
-
         if (drag) {
             setX(mouseX + diffX);
             setY(mouseY + diffY);
@@ -80,20 +79,17 @@ public class Panel extends PanelBase<IPanelItem> {
         setRenderX(getX());
         double x = getRenderX();
         double y = getRenderY();
-        IRenderer2D renderer = RusherHackAPI.getRenderer2D();
-
+        final IRenderer2D renderer = RusherHackAPI.getRenderer2D();
         double height = this.getHeight();
-        renderer.begin(context.pose());
-        renderer.drawRectangle(x, y - 14.5f, getWidth(), height, Color.BLACK.getRGB());
+        renderer.drawRectangle(x, y - 14.5f, getWidth(), height, new Color(0, 0, 0, 100).getRGB());
 
         if (height > 0) {
             renderer.drawOutlinedRectangle(x, y, getWidth(), height + 1.5F, 1, ExamplePlugin.theme.colorSetting.getValue().getRGB(), Color.MAGENTA.getRGB());
         }
-        double offsetX = (getWidth() - renderer.getFontRenderer().getStringWidth(category.toString())) / 2F;
-        renderer.getFontRenderer().drawString(category.toString(), x + offsetX, y - 15 + 2.5F, ExamplePlugin.theme.fontColor.getValue().getRGB());
+        double offsetX = (getWidth() - renderer.getFontRenderer().getStringWidth(category)) / 2F;
+        renderer.getFontRenderer().drawString(category, x + offsetX, y - 15 + 2.5F, ExamplePlugin.theme.fontColor.getValue().getRGB());
         renderer.scissorBox(x, y, x + getWidth(),y + height);
         double y0 = y + getRenderYModule() + 1.5F;
-        renderer.begin(context.pose());
         if (height > 0) {
             for (ModuleItem frame : moduleItems) {
                 frame.setX(x);
@@ -101,27 +97,28 @@ public class Panel extends PanelBase<IPanelItem> {
                 y0 += (frame.getHeight(false) + .5F);
                 frame.render(context, mouseX, mouseY);
             }
-            for (IPanelItem frame : getItemList()) {
-                frame.render(context, mouseX, mouseY);
-            }
 
             modulesHeight = y0;
 
         }
 
-        renderer.end();
         renderer.endScissor();
     }
 
     @Override
     public double getWidth() {
-        return 120;
+        return 100;
     }
 
     @Override
     public double getHeight() {
-        return 300;
+        double i = 14f;
+        for(ModuleItem item : moduleItems){
+            i += item.getHeight();
+        }
+        return i;
     }
+
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -141,8 +138,17 @@ public class Panel extends PanelBase<IPanelItem> {
     }
 
     @Override
+    public void mouseReleased(double mouseX, double mouseY, int button) {
+        super.mouseReleased(mouseX, mouseY, button);
+        if (button == 0) drag = false;
+        if (open) moduleItems.forEach(frame -> frame.mouseReleased(mouseX, mouseY, button));
+    }
+
+    @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        scrollAmount = delta;
+        if(isHovering(mouseX, mouseY, getX(), getY() - 14.5F, getWidth(), getHeight())) {
+            scrollAmount = delta;
+        }
         return false;
     }
     public boolean isHovering(double mouseX, double mouseY, double x, double y, double width, double height) {
@@ -166,7 +172,6 @@ public class Panel extends PanelBase<IPanelItem> {
     }
     public void setModuleItems(List<ModuleItem> moduleFrames) {
         this.moduleItems = moduleFrames;
-        getItemList().addAll(moduleFrames);
         scrollHeight = (float) (getModuleItems().stream()
                 .mapToDouble(frame -> frame.getHeight(false) + .5)
                 .sum());
