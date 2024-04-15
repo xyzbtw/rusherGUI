@@ -6,7 +6,7 @@ import org.rusherhack.core.event.subscribe.Subscribe;
 import java.util.LinkedList;
 
 public class FpsManager {
-    private static int fps;
+    private int fps;
     private final LinkedList<Long> frames = new LinkedList<>();
 
     @Subscribe
@@ -25,7 +25,7 @@ public class FpsManager {
         fps = frames.size();
     }
 
-    public static int getFPS() {
+    public int getFPS() {
         return fps;
     }
 
