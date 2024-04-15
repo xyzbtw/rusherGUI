@@ -188,10 +188,10 @@ public class Panel extends PanelBase<IPanelItem> {
     }
 
     public double getRenderYModule() {
-        if (mc.getFps() < 20) {
+        if (FpsManager.getFPS() < 20) {
             return renderYModule;
         }
-        renderYModule = prevYModule + (renderYModule - prevYModule) * mc.getDeltaFrameTime() / (8 * (Math.min(240, mc.getFps()) / 240f));
+        renderYModule = prevYModule + (renderYModule - prevYModule) * mc.getDeltaFrameTime() / (8 * (Math.min(240, FpsManager.getFPS()) / 240f));
         return renderYModule;
     }
 
@@ -202,7 +202,7 @@ public class Panel extends PanelBase<IPanelItem> {
     }
 
     public double getRenderX() {
-        renderX = prevX + (renderX - prevX) * mc.getDeltaFrameTime() / (8 * (Math.min(240, mc.getFps()) / 240f));
+        renderX = prevX + (renderX - prevX) * mc.getDeltaFrameTime() / (8 * (Math.min(240, FpsManager.getFPS()) / 240f));
         return renderX;
     }
 
@@ -214,10 +214,10 @@ public class Panel extends PanelBase<IPanelItem> {
 
 
     public double getRenderY() {
-        if (mc.getFps() < 20) {
+        if (FpsManager.getFPS() < 20) {
             return renderY;
         }
-        renderY = prevY + (renderY - prevY) * mc.getDeltaFrameTime() / (8 * (Math.min(240, mc.getFps()) / 240f));
+        renderY = prevY + (renderY - prevY) * mc.getDeltaFrameTime() / (8 * (Math.min(240, FpsManager.getFPS()) / 240f));
         return renderY;
     }
 }

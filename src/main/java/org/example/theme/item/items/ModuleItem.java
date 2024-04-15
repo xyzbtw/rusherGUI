@@ -174,6 +174,7 @@ public class ModuleItem extends ElementBase implements IPanelItem {
             if(setting instanceof BooleanSetting) {
                 this.addSubItem(new BooleanItem(this.module, this.panel, this, (BooleanSetting) setting));
             }
+
 //            } else if(setting instanceof NumberSetting<?>) {
 //                this.addSubItem(new ClassicSliderItem(this.getPanel(), this, (NumberSetting<?>) setting));
 //            } else if(setting instanceof EnumSetting<?>) {
