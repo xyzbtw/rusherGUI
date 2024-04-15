@@ -68,7 +68,7 @@ public class Panel extends PanelBase<IPanelItem> {
 
         if(open) {
             if (height > 0) {
-                renderer.drawOutlinedRectangle(x, y + 14.5, getWidth(), height + 1.5F - 14.5, ExamplePlugin.theme.outlineWidth.getValue(),
+                renderer.drawOutlinedRectangle(x, y, getWidth(), height + 1.5F, ExamplePlugin.theme.outlineWidth.getValue(),
                         ExamplePlugin.theme.backColor.getValueRGB(),
                         ExamplePlugin.theme.outlineColor.getValueRGB());
             }
