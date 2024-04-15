@@ -31,8 +31,8 @@ import static org.rusherhack.client.api.Globals.mc;
 public class ModuleItem extends ElementBase implements IPanelItem {
     IModule module;
     Panel panel;
-    private boolean open = false;
-    private final ArrayList<IPanelItem> subItems = new ArrayList<>();
+    public boolean open = false;
+    private final ArrayList<ExtendableItem> subItems = new ArrayList<>();
     private double prevHeight, rendererHeight;
 
     public ModuleItem(IModule module, Panel panel){
@@ -54,12 +54,12 @@ public class ModuleItem extends ElementBase implements IPanelItem {
 
     @Override
     public double getHeight() {
-        return 11;
+        return prevHeight + (rendererHeight - prevHeight);
     }
 
     @Override
     public double getHeight(boolean total) {
-        return 11;
+        return prevHeight + (rendererHeight - prevHeight);
     }
 
     @Override
@@ -70,17 +70,35 @@ public class ModuleItem extends ElementBase implements IPanelItem {
     @Override
     public void render(RenderContext context, double mouseX, double mouseY) {
         final IRenderer2D renderer = RusherHackAPI.getRenderer2D();
-        final IFontRenderer fontRenderer = RusherHackAPI.fonts().getFontRenderer();
+        final IFontRenderer fontRenderer = renderer.getFontRenderer();
         possibleHeightUpdate();
+
 
         if(module instanceof ToggleableModule){
             renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(true),
                     ((ToggleableModule) module).isToggled()
-                        ? new Color(155, 255, 0, 50).getRGB()
-                        : ExamplePlugin.theme.colorSetting.getValue().getRGB());
-        }else renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(true), new Color(155, 255, 0, 50).getRGB());
-        fontRenderer.drawString(module.getName(), getX() + 3.5f, (panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight()) ? 1F + getY() : 2F + getY()) - 1F, ExamplePlugin.theme.fontColor.getValue().getRGB());
+                            ? ExamplePlugin.theme.getColorSetting().getValue().getRGB()
+                            : ExamplePlugin.theme.backColor.getValueRGB());
+        }else
+            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(true), ExamplePlugin.theme.backColor.getValueRGB());
 
+        fontRenderer.drawString(module.getName(), getX() + 3.5f, (panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight()) ? getY() : 1F + getY()), ExamplePlugin.theme.fontColor.getValue().getRGB());
+
+        if(!subItems.isEmpty() && open) {
+            renderer.getMatrixStack().pushPose();
+            double height = 13f;
+            for (ExtendableItem subItem : subItems) {
+                subItem.setX(getX());
+                subItem.setY(getY() + height);
+
+                subItem.render(context, mouseX, mouseY);
+                height += subItem.getHeight() + 0.5F;
+            }
+            renderer.getMatrixStack().popPose();
+
+        }
+
+        renderer.endScissor();
 
         if(panel.isHovering(mouseX,mouseY, getX(), getY(), getWidth(), getHeight())) {
             renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(true), new Color(0, 0, 0, 50).getRGB());
@@ -91,32 +109,29 @@ public class ModuleItem extends ElementBase implements IPanelItem {
 
             drawDesc(renderer, mouseX + 8,mouseY + 8, description);
         }
+
     }
     public void drawDesc(IRenderer2D mesh2D, double x, double y, String text) {
-        Runnable runnable = () -> {
-            mesh2D.getMatrixStack().pushPose();
-            mesh2D.getMatrixStack().translate(0F, 0F, 200F);
-            IFontRenderer fontRenderer = RusherHackAPI.fonts().getFontRenderer();
-            List<Tuple<Float, String>> pairs = new ArrayList<>();
-            String[] lines = text.split("\n");
-            float offset = 0;
-            for (String s : lines) {
-                pairs.add(new Tuple<>(offset, s));
-                offset += (float) mesh2D.getFontRenderer().getFontHeight();
-            }
-            double maxWidth = Arrays.stream(lines)
-                    .map(fontRenderer::getStringWidth)
-                    .max(Comparator.comparing(i -> i)).orElse(0.0);
-            double diff = Math.max(0, x + maxWidth - mc.getWindow().getGuiScaledWidth());
-            double x0 = x - (diff + (diff > 0 ? 1F : 0F));
-            mesh2D.drawOutlinedRectangle(x0 - 0.5F, y - 0.5F, maxWidth + 0.5F, offset, 1, new Color(0, 0, 0, 50).getRGB(), new Color(0, 0, 0, 50).getRGB());
+//        mesh2D.getMatrixStack().pushPose();
+//        mesh2D.getMatrixStack().translate(0F, 0F, 200F);
+        IFontRenderer fontRenderer = RusherHackAPI.fonts().getFontRenderer();
+        List<Tuple<Float, String>> pairs = new ArrayList<>();
+        String[] lines = text.split("\n");
+        float offset = 0;
+        for (String s : lines) {
+            pairs.add(new Tuple<>(offset, s));
+            offset += (float) mesh2D.getFontRenderer().getFontHeight();
+        }
+        double maxWidth = Arrays.stream(lines)
+                .map(fontRenderer::getStringWidth)
+                .max(Comparator.comparing(i -> i)).orElse(0.0);
+        double diff = Math.max(0, x + maxWidth - mc.getWindow().getGuiScaledWidth());
+        double x0 = x - (diff + (diff > 0 ? 1F : 0F));
+        mesh2D.drawRectangle(x0 - 0.5F, y - 0.5F, maxWidth + 0.5F, offset, new Color(0, 0, 0, 50).getRGB());
 
-            for (Tuple<Float, String> pair : pairs) {
-                fontRenderer.drawString(pair.getB(), x0, y + pair.getA() - 1F, ExamplePlugin.theme.fontColor.getValue().getRGB());
-            }
-        };
-        runnable.run();
-
+        for (Tuple<Float, String> pair : pairs) {
+            fontRenderer.drawString(pair.getB(), x0, y + pair.getA() - 1F, ExamplePlugin.theme.fontColor.getValue().getRGB());
+        }
     }
 
     @Override
@@ -151,11 +166,10 @@ public class ModuleItem extends ElementBase implements IPanelItem {
         double temp;
         if (open)
             temp = (float) (subItems.stream()
-                    .filter(IPanelItem::isVisible)
-                    .mapToDouble(frame -> frame.getHeight(true) + .5)
-                    .sum() + getHeight(true));
+                    .mapToDouble(ExtendableItem::getHeight/* + .5*/)
+                    .sum() + getHeight());
         else {
-            temp = getHeight(false);
+            temp = getHeight();
         }
         if (this.rendererHeight == temp){
             return;
@@ -165,8 +179,9 @@ public class ModuleItem extends ElementBase implements IPanelItem {
     }
     public void addSettingItems(List<Setting<?>> settings) {
         for(Setting<?> setting : settings) {
-//            if(setting instanceof BooleanSetting) {
-//                this.addSubItem(new ClassicBooleanItem(this.getPanel(), this, (BooleanSetting) setting));
+            if(setting instanceof BooleanSetting) {
+                this.addSubItem(new BooleanItem(this.module, this.panel, this, (BooleanSetting) setting));
+            }
 //            } else if(setting instanceof NumberSetting<?>) {
 //                this.addSubItem(new ClassicSliderItem(this.getPanel(), this, (NumberSetting<?>) setting));
 //            } else if(setting instanceof EnumSetting<?>) {
@@ -187,7 +202,7 @@ public class ModuleItem extends ElementBase implements IPanelItem {
 //            }
         }
     }
-    public void addSubItem(IPanelItem item) {
+    public void addSubItem(ExtendableItem item) {
         this.subItems.add(item);
     }
 }

@@ -81,28 +81,32 @@ public class Panel extends PanelBase<IPanelItem> {
         double y = getRenderY();
         final IRenderer2D renderer = RusherHackAPI.getRenderer2D();
         double height = this.getHeight();
-        renderer.drawRectangle(x, y - 14.5f, getWidth(), height, new Color(0, 0, 0, 100).getRGB());
-
-        if (height > 0) {
-            renderer.drawOutlinedRectangle(x, y, getWidth(), height + 1.5F, 1, ExamplePlugin.theme.colorSetting.getValue().getRGB(), Color.MAGENTA.getRGB());
-        }
+        renderer.drawRectangle(x, y - 14.5f, getWidth(),16f, new Color(0, 0, 0, 100).getRGB());
         double offsetX = (getWidth() - renderer.getFontRenderer().getStringWidth(category)) / 2F;
         renderer.getFontRenderer().drawString(category, x + offsetX, y - 15 + 2.5F, ExamplePlugin.theme.fontColor.getValue().getRGB());
-        renderer.scissorBox(x, y, x + getWidth(),y + height);
-        double y0 = y + getRenderYModule() + 1.5F;
-        if (height > 0) {
-            for (ModuleItem frame : moduleItems) {
-                frame.setX(x);
-                frame.setY(y0);
-                y0 += (frame.getHeight(false) + .5F);
-                frame.render(context, mouseX, mouseY);
+
+        if(open) {
+            if (height > 0) {
+                renderer.drawOutlinedRectangle(x, y, getWidth(), height + 1.5F, 1,
+                        ExamplePlugin.theme.backColor.getValueRGB(),
+                        ExamplePlugin.theme.outlineColor.getValueRGB());
             }
+            //renderer.scissorBox(x, y, x + getWidth(), y + height);
+            double y0 = y + getRenderYModule() + 1.5F;
+            if (height > 0) {
+                for (ModuleItem frame : moduleItems) {
+                    frame.setX(x);
+                    frame.setY(y0);
+                    y0 += (frame.getHeight(false) + .5F);
+                    frame.render(context, mouseX, mouseY);
+                }
 
-            modulesHeight = y0;
+                modulesHeight = y0;
 
+            }
         }
 
-        renderer.endScissor();
+        //renderer.endScissor();
     }
 
     @Override
@@ -112,7 +116,7 @@ public class Panel extends PanelBase<IPanelItem> {
 
     @Override
     public double getHeight() {
-        double i = 14f;
+        double i = 16f;
         for(ModuleItem item : moduleItems){
             i += item.getHeight();
         }

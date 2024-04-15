@@ -3,41 +3,28 @@ package org.example.theme;
 import org.jetbrains.annotations.Nullable;
 import org.rusherhack.client.api.setting.ColorSetting;
 import org.rusherhack.client.api.ui.panel.PanelHandlerBase;
-import org.rusherhack.client.api.ui.theme.ITheme;
-import org.rusherhack.core.setting.Setting;
+import org.rusherhack.client.api.ui.theme.ThemeBase;
 
 import java.awt.*;
-import java.util.List;
 
-public class Theme implements ITheme {
-    public ColorSetting colorSetting = new ColorSetting("TestColor", new Color(148, 141, 252));
+public class Theme extends ThemeBase {
     public ColorSetting fontColor = new ColorSetting("FontColor", new Color(148, 141, 252));
+    public ColorSetting backColor = new ColorSetting("BackColor", new Color(0, 0, 0, 100));
+    public ColorSetting outlineColor = new ColorSetting("OutlineColor", new Color(100, 0, 0, 100));
 
-    @Override
-    public @Nullable PanelHandlerBase<?> getClickGuiHandler() {
-        return ExamplePlugin.handler;
-    }
-
-    @Override
-    public ColorSetting getColorSetting() {
-        return colorSetting;
-    }
-
-    @Override
-    public List<Setting<?>> getSettings() {
-        return List.of(
-                colorSetting,
+    public Theme(String name, String description, Color defaultColor) {
+        super(name, description, defaultColor);
+        registerSettings(
+                backColor,
+                outlineColor,
                 fontColor
         );
     }
 
     @Override
-    public String getDescription() {
-        return "Funny theme";
+    public @Nullable PanelHandlerBase<?> getClickGuiHandler() {
+        registerSettings();
+        return ExamplePlugin.handler;
     }
 
-    @Override
-    public String getName() {
-        return "TestTHEME";
-    }
 }

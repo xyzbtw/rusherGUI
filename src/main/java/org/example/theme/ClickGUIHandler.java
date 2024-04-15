@@ -37,7 +37,7 @@ public class ClickGUIHandler extends PanelHandlerBase<ElementBase> {
         });
 
         List<ModuleItem> pluginModules = new ArrayList<>();
-        final ClassLoader rusherhackClassLoader = RusherHackAPI.getModuleManager().getFeature("Aura").getClass().getClassLoader();
+        final ClassLoader rusherhackClassLoader = RusherHackAPI.getModuleManager().getFeature("Aura").get().getClass().getClassLoader();
         System.out.println("RH CLASSLOADER"  + rusherhackClassLoader);
 
         Panel pluginPanel = new Panel(this, "Plugins", x1, 17);
