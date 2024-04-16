@@ -12,18 +12,6 @@ public class NullItem extends ExtendableItem{
         super(parent, module, panel, settingValue);
     }
 
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        subItems.forEach(i -> {
-            i.mouseClicked(mouseX, mouseY, button);
-        });
-
-        if(isHovering(mouseX, mouseY) && button == 1) {
-            open = !open;
-        }
-
-        return super.mouseClicked(mouseX, mouseY, button);
-    }
 
     @Override
     public void render(RenderContext context, double mouseX, double mouseY) {
@@ -55,6 +43,36 @@ public class NullItem extends ExtendableItem{
     @Override
     public double getHeight() {
         return super.getHeight();
+    }
+
+
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if(isHovering(mouseX, mouseY) && button == 1) {
+            open = !open;
+        }
+
+        if(open) subItems.forEach(i -> i.mouseClicked(mouseX, mouseY, button));
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public void mouseReleased(double mouseX, double mouseY, int button) {
+        super.mouseReleased(mouseX, mouseY, button);
+        if(open) subItems.forEach(frame -> frame.mouseReleased(mouseX, mouseY, button));
+    }
+
+    @Override
+    public boolean charTyped(char character) {
+        if(open) subItems.forEach(frame -> frame.charTyped(character));
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(int key, int scanCode, int modifiers) {
+        if(open) subItems.forEach(frame -> frame.keyTyped(key, scanCode, modifiers));
+        return false;
     }
 
 
