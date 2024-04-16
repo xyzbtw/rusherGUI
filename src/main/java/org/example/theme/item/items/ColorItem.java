@@ -19,13 +19,13 @@ public class ColorItem extends ExtendableItem{
         colorMode = ((ColorSetting) setting).getRainbowMode();
 
         // size
-        this.svPickerWidth = getWidth() - 7;
-        this.svPickerHeight = 100;
+        this.svPickerWidth = getWidth() - 10;
+        this.svPickerHeight = getWidth() - 10;
 
         this.hPickerWidth = 6;
-        this.hPickerHeight = 100;
+        this.hPickerHeight = getWidth() - 10;
 
-        this.aPickerWidth = getWidth() - 7;
+        this.aPickerWidth = getWidth() - 10;
         this.aPickerHeight = 6;
 
         // cursors
@@ -174,7 +174,6 @@ public class ColorItem extends ExtendableItem{
                     renderer.drawRectangle(aRectX1, aPickerY, aRectX2, aRectScale, i % 2 == 0 ? new Color(255, 255, 255).getRGB() : new Color(204, 204, 204).getRGB());
                     renderer.drawRectangle(aRectX1, aPickerY + aRectScale, aRectX2, aRectScale, (i + 1) % 2 == 0 ? new Color(255, 255, 255).getRGB() : new Color(204, 204, 204).getRGB());
                 }
-                ColorUtils.getRGBA(new Color(c.getRed(), c.getGreen(), c.getBlue(), 1).getRGB());
                 int right = toRGBA(c.getRed(), c.getGreen(), c.getBlue(), 1);
                 int left = toRGBA(c.getRed(), c.getGreen(), c.getBlue(), 255);
                 renderer.drawGradientRectangle(aPickerX, aPickerY, aPickerWidth + aPickerX, aPickerHeight + aPickerY,
@@ -200,7 +199,7 @@ public class ColorItem extends ExtendableItem{
                 double v = ((svPickerHeight - 3F) - svCursorY) / (svPickerHeight - 3F);
                 double a = aCursorX / ((aPickerWidth - 3F));
                 Color color = new Color(Color.HSBtoRGB((float) h, (float) s, (float) v));
-                setting.setValue(new ColorSetting(setting.getName() ,new Color(color.getRed(), color.getGreen(), color.getBlue(), Math.max(0, Math.min(255, (int) (a * 255))))));
+                setting.setValue(new Color(color.getRed(), color.getGreen(), color.getBlue(), Math.max(0, Math.min(255, (int) (a * 255)))));
 
                 changed = false;
             }
