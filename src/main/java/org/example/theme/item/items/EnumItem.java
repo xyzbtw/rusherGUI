@@ -35,7 +35,7 @@ public class EnumItem extends ExtendableItem{
             renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), new Color(0,0,0, 70).getRGB());
         }
 
-        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getName() + ": " + setting.getValue(), getWidth()), getX() + 1, getY() + 1.5, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
+        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName() + ": " + setting.getValue(), getWidth()), getX() + 1, getY() + 1.5, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
 
         renderSubItems(context, mouseX, mouseY, subItems, open);
 
@@ -48,7 +48,7 @@ public class EnumItem extends ExtendableItem{
                             "\n" +
                             ChatFormatting.RESET +
                             (setting.getDescription().isEmpty() ?
-                                    "A Mode setting." + ChatFormatting.GREEN + " Name" + ChatFormatting.RESET + " «" + setting.getName() + "»."
+                                    "A Mode setting." + ChatFormatting.GREEN + " Name" + ChatFormatting.RESET + " «" + setting.getDisplayName() + "»."
                                     : setting.getDescription());
 
             drawDesc(renderer, mouseX + 8, mouseY + 8, description);
@@ -119,20 +119,6 @@ public class EnumItem extends ExtendableItem{
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    @Override
-    public boolean charTyped(char character) {
-        return super.charTyped(character);
-    }
-
-    @Override
-    public boolean keyTyped(int key, int scanCode, int modifiers) {
-        return super.keyTyped(key, scanCode, modifiers);
-    }
-
-    @Override
-    public void mouseReleased(double mouseX, double mouseY, int button) {
-        super.mouseReleased(mouseX, mouseY, button);
-    }
     @Override
     public double getY() {
         return super.getY();

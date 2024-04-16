@@ -60,7 +60,7 @@ public class Panel extends PanelBase<IPanelItem> {
         double y = getY();
         final IRenderer2D renderer = RusherHackAPI.getRenderer2D();
         double height = this.getHeight();
-        renderer.drawRectangle(x, y - 14.5f, getWidth(),14.5, new Color(0, 0, 0, 100).getRGB());
+        renderer.drawRectangle(x, y - 14.5f, getWidth(),14.5, ExamplePlugin.theme.categoryColor.getValueRGB());
         double offsetX = (getWidth() - renderer.getFontRenderer().getStringWidth(category)) / 2F;
         getFontRenderer().drawString(category, x + offsetX, y -  14.5/2 - 3, ExamplePlugin.theme.fontColor.getValue().getRGB());
 

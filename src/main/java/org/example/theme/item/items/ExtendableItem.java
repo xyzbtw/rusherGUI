@@ -17,9 +17,7 @@ import org.rusherhack.client.api.ui.panel.IPanelItem;
 import org.rusherhack.core.setting.*;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_R;
@@ -69,7 +67,7 @@ public class ExtendableItem extends ElementBase implements IPanelItem {
 
     @Override
     public double getWidth() {
-        return parent.getWidth() - 1;
+        return parent.getWidth() - 3;
     }
 
     @Override
@@ -124,7 +122,6 @@ public class ExtendableItem extends ElementBase implements IPanelItem {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         subItems.forEach(subItem -> {
             subItem.mouseClicked(mouseX, mouseY, button);
-            subItem.subItems.forEach(subItem1 -> subItem1.mouseClicked(mouseX, mouseY, button));
         });
         return false;
     }
@@ -134,7 +131,6 @@ public class ExtendableItem extends ElementBase implements IPanelItem {
         IPanelItem.super.mouseReleased(mouseX, mouseY, button);
         subItems.forEach(subItem -> {
             subItem.mouseReleased(mouseX, mouseY, button);
-            subItem.subItems.forEach(subItem1 -> subItem1.mouseReleased(mouseX, mouseY, button));
         });
     }
 
@@ -142,7 +138,6 @@ public class ExtendableItem extends ElementBase implements IPanelItem {
     public boolean charTyped(char character) {
         subItems.forEach(subItem -> {
             subItem.charTyped(character);
-            subItem.subItems.forEach(subItem1 -> subItem1.charTyped(character));
         });
         return false;
     }
@@ -151,7 +146,6 @@ public class ExtendableItem extends ElementBase implements IPanelItem {
     public boolean keyTyped(int key, int scanCode, int modifiers) {
         subItems.forEach(subItem -> {
             subItem.keyTyped(key, scanCode, modifiers);
-            subItem.subItems.forEach(subItem1 -> subItem1.keyTyped(key, scanCode, modifiers));
         });
 
         return false;

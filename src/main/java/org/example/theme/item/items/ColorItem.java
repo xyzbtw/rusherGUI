@@ -11,6 +11,7 @@ import org.rusherhack.core.setting.Setting;
 import org.rusherhack.core.utils.ColorUtils;
 
 import java.awt.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ColorItem extends ExtendableItem{
@@ -80,31 +81,28 @@ public class ColorItem extends ExtendableItem{
     public void render(RenderContext context, double mouseX, double mouseY) {
         super.render(context, mouseX, mouseY);
         possibleHeightUpdate();
-
-
-
-        renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), ExamplePlugin.theme.getColorSetting().getValueRGB());
+        double x = parent.getX() + 1.5;
+        renderer.drawRectangle(x ,getY(), getWidth(), getHeight(), ExamplePlugin.theme.getColorSetting().getValueRGB());
 
         if(isHovering(mouseX, mouseY)) {
-            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), new Color(0, 0, 0, 70).getRGB());
+            renderer.drawRectangle(x, getY(), getWidth(), getHeight(), new Color(0, 0, 0, 70).getRGB());
         }
 
 
-        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getName(), getWidth()), getX(), getY() + 2, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
+        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName(), getWidth()), x + 1, getY() + 2, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
         double rectScale = getHeight();
-        double rectX = getX() + getWidth() - rectScale - 15;
+        double rectX = x + getWidth() - rectScale - 15;
         double rectY = (int) getCenter(getY(), getHeight(), rectScale) + 3;
 
-        renderer.drawRectangle(rectX - 1.3F, rectY - 1.3F, 26, 9.5F, Color.BLACK.getRGB());
+        renderer.drawRectangle(rectX - 1.3F, rectY - 1.3F, 25, 8.5F, Color.BLACK.getRGB());
         renderer.drawRectangle(rectX - 0.7F, rectY - 0.7F, 24, 7.5F, Color.WHITE.getRGB());
         renderer.drawRectangle(rectX - 0.7F, rectY - 0.7F, 24, 7.5F, ((ColorSetting) setting).getValueRGB());
 
-        //mesh.matrixStack.translate(0, 0, 10);
 
 
         if (open || getHeight() > 11) {
             Color c = ((ColorSetting) this.setting).getValue();
-            double pickerX = this.getX() + 1.5F;
+            double pickerX = x + 1.5F;
             double pickerY = this.getY() + this.getHeight();
             // sv
             h = ((hPickerHeight - 3) - hCursorY) / (hPickerHeight - 3); //0-80
@@ -145,6 +143,7 @@ public class ColorItem extends ExtendableItem{
             }
 
             // h
+
             this.hPickerX = svPickerX + svPickerWidth + 4;
             this.hPickerY = svPickerY - 0.3F;
             r = 1.0F / hPickerHeight;
@@ -157,6 +156,18 @@ public class ColorItem extends ExtendableItem{
             }
             // h cursor
             renderCursorNoWith(hCursorX + hPickerX, hCursorY + hPickerY, renderer);
+
+            if (hChanging) {
+                hCursorY = mouseY - hPickerY;
+                if (hCursorY < 0)
+                    hCursorY = 0;
+                if (hCursorY > hPickerHeight)
+                    hCursorY = hPickerHeight;
+                if (hCursorY + 3 > hPickerHeight)
+                    hCursorY = hPickerHeight - 3;
+
+                changed = true;
+            }
 
             if (!small) {
                 // alpha
@@ -204,24 +215,20 @@ public class ColorItem extends ExtendableItem{
                 changed = false;
             }
             posYRainbow = !small ? aPickerY + 9 : svPickerY + svPickerHeight + 1;
-            renderer.drawRectangle(getX(), posYRainbow, getWidth() - 1, getHeight(), isHovering(mouseX, mouseY, getX(), posYRainbow, getX() + getWidth(), posYRainbow + getHeight()) ? new Color(0, 0, 0, 70).getRGB() : ExamplePlugin.theme.getColorSetting().getValueRGB());
-            fontRenderer.drawText(fontRenderer.trimStringToWidth("ColorMode: " + colorMode.name(), getWidth()), getX() + 3.5, posYRainbow, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), getHeight());
+            //renderer.drawRectangle(x, posYRainbow, getWidth() - 1, getHeight(), isHovering(mouseX, mouseY, x, posYRainbow, x + getWidth(), posYRainbow + getHeight()) ? new Color(0, 0, 0, 70).getRGB() : ExamplePlugin.theme.getColorSetting().getValueRGB());
+            //fontRenderer.drawText(fontRenderer.trimStringToWidth("ColorMode: " + colorMode.name(), getWidth()), x + 3.5, posYRainbow, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), getHeight());
             if (sChanging) {
                 setSettingFromX(mouseX);
             }
-      /*      if (colorMode == ColorMode.Rainbow) {
-                mesh.fill(x, posYRainbow + height + 1, width * partialMultiplier(), height, isHovering(mouseX, mouseY, x, posYRainbow + height + 1, x + width, height + posYRainbow + height + 1) ? getHoverColor(getMainColor()) : getMainColor(), true);
-                drawText(mesh, "Speed: " + speed, x + 3.5F, posYRainbow + height,  width,  height, mouseX, mouseY);
-            }*/
         }
 
 
         if (isHovering(
                 mouseX,
                 mouseY,
-                getX(),
+                x,
                 getY(),
-                getX() + getWidth(),
+                x + getWidth(),
                 getY() + getHeight()
         )) {
             String description =
@@ -232,7 +239,7 @@ public class ColorItem extends ExtendableItem{
                             "\n" +
                             ChatFormatting.WHITE +
                             (setting.getDescription().isEmpty() ?
-                                    "A Color setting." + ChatFormatting.GREEN + " Name" + ChatFormatting.RESET + " «" + setting.getName() + "»."
+                                    "A Color setting." + ChatFormatting.GREEN + " Name" + ChatFormatting.RESET + " «" + setting.getDisplayName() + "»."
                                     : setting.getDescription());
 
             drawDesc(renderer, mouseX + 8, mouseY + 8, description);
@@ -244,34 +251,56 @@ public class ColorItem extends ExtendableItem{
     }
 
     @Override
+    public boolean keyTyped(int keyCode, int scanCode, int modifiers) {
+        if (isCopy(keyCode) && isHovering(mouseX, mouseY, getX(), getY(), getX() + getWidth(), getY() + getHeight())) {
+
+            setClipboardString("ColorItem[" +
+                    ((ColorSetting) setting).getValue().getRed() + "/" +
+                    ((ColorSetting) setting).getGreen() + "/" +
+                    ((ColorSetting) setting).getBlue() + "/" +
+                    ((ColorSetting) setting).getAlpha() +
+                    "]");
+        }
+        if (isPaste(keyCode) && isHovering(mouseX, mouseY, getX(), getY(), getX() + getWidth(), getY() + getHeight()) && getClipboardString().startsWith("ColorItem[")) {
+            Matcher matcher = pattern.matcher(getClipboardString());
+
+            while (matcher.find()) {
+                String[] split = matcher.group(0).split("/");
+                Color color = new Color(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]));
+                setting.setValue(color);
+                float[] hsv = Color.RGBtoHSB(color.getRed(), color.getBlue(), color.getGreen(), null);
+                hCursorY = hsv[0] * (hPickerHeight - 3F);
+                svCursorX = hsv[1] * (svPickerWidth - 3F);
+                svCursorY = (1.0F - hsv[2]) * (svPickerHeight - 3F);
+                aCursorX = (color.getAlpha() / 255F) * (aPickerWidth - 3F);
+                changed = true;
+            }
+        }
+        if (isCTRLR(keyCode) && isHovering(mouseX, mouseY, getX(), getY(), getX() + getWidth(), getY() + getHeight())) {
+            Color color = ((ColorSetting) setting).getDefaultValue();
+            setting.setValue(color);
+            float[] hsv = Color.RGBtoHSB(color.getRed(), color.getBlue(), color.getGreen(), null);
+            hCursorY = hsv[0] * (hPickerHeight - 3F);
+            svCursorX = hsv[1] * (svPickerWidth - 3F);
+            svCursorY = (1.0F - hsv[2]) * (svPickerHeight - 3F);
+            aCursorX = (color.getAlpha() / 255F) * (aPickerWidth - 3F);
+            changed = true;
+        }
+        return super.keyTyped(keyCode, scanCode, modifiers);
+    }
+
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (open) {
             if (button == 0) {
                 if (isHovering(mouseX, mouseY, svPickerX, svPickerY, svPickerX + svPickerWidth, svPickerY + svPickerHeight)) {
                     svChanging = true;
                 }
-                if (isHovering(mouseX, mouseY, hPickerX, hPickerY, hPickerX + hPickerWidth, hPickerY + hPickerHeight) && colorMode.equals(ColorSetting.RainbowMode.GRADIENT)) {
+                if (isHovering(mouseX, mouseY, hPickerX, hPickerY, hPickerX + hPickerWidth, hPickerY + hPickerHeight)) {
                     hChanging = true;
                 }
                 if (isHovering(mouseX, mouseY, aPickerX, aPickerY, aPickerX + aPickerWidth, aPickerY + aPickerHeight) && !small) {
                     aChanging = true;
-                }
-                if (isHovering(mouseX, mouseY, getX(), posYRainbow + getHeight() + 1, getX() + getWidth(), getHeight() + posYRainbow + getHeight() + 1) && colorMode.equals(ColorSetting.RainbowMode.RAINBOW)) {
-                    sChanging = true;
-                    changed = true;
-                }
-                if (isHovering(mouseX, mouseY, getX(), posYRainbow, getX() + getWidth(), posYRainbow + getHeight(false))) {
-                    colorMode = (ColorSetting.RainbowMode) next(colorMode);
-                    changed = true;
-
-                }
-            }
-
-            if (button == 1) {
-                if (isHovering(mouseX, mouseY, getX(), posYRainbow, getX() + getWidth(), posYRainbow + getHeight(false))) {
-                    colorMode = (ColorSetting.RainbowMode) previous(colorMode);
-                    changed = true;
-
                 }
             }
         }
@@ -325,8 +354,8 @@ public class ColorItem extends ExtendableItem{
     protected void possibleHeightUpdate() {
         double temp;
         if (open) {
-            double l = !small ? 146.5F : 135F;
-            temp = colorMode.equals(ColorSetting.RainbowMode.RAINBOW) ? l : l - getHeight(false);
+            double l = !small ? 114F : 102.5F;
+            temp = l - getHeight(false);
         } else {
             temp = super.getHeight();
         }
@@ -335,16 +364,5 @@ public class ColorItem extends ExtendableItem{
         }
         prevHeight = this.renderHeight;
         this.renderHeight = temp;
-    }
-    public static Enum<?> next(Enum<?> entry) {
-        Enum<?>[] array = entry.getDeclaringClass().getEnumConstants();
-        return array.length - 1 == entry.ordinal()
-                ? array[0]
-                : array[entry.ordinal() + 1];
-    }
-
-    public static Enum<?> previous(Enum<?> entry) {
-        Enum<?>[] array = entry.getDeclaringClass().getEnumConstants();
-        return entry.ordinal() - 1 < 0 ? array[array.length - 1] : array[entry.ordinal() - 1];
     }
 }

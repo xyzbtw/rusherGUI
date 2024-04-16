@@ -48,7 +48,7 @@ public class BooleanItem extends ExtendableItem {
 
         renderSubItems(context, mouseX, mouseY, subItems, open);
 
-        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getName(), getWidth()), getX() + 1, getY() + 2.5, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
+        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName(), getWidth()), getX() + 1, getY() + 1.5, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
 
     }
     @Override
@@ -60,23 +60,16 @@ public class BooleanItem extends ExtendableItem {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if(button == 0){
             if(panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight())) {
-                System.out.println("PRE " + setting.getValue());
                 setting.setValue(!setting.getValue());
-                System.out.println("POST " + setting.getValue());
             }
         }
 
-        return false;
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public double getY() {
         return super.getY();
-    }
-
-    @Override
-    public double getWidth() {
-        return super.getWidth();
     }
 
     @Override

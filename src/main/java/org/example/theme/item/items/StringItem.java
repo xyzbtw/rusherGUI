@@ -47,11 +47,11 @@ public class StringItem extends ExtendableItem{
         }
 
 
-        fontRenderer.drawText(setting.getName() + ": " + (listening ? str.toString() : setting.getValue()), getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
+        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName() + ": " + (listening ? str.toString() : setting.getValue()), getWidth()), getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
 
         if (listening) {
             fontRenderer.drawText(getIdleSign(),
-            fontRenderer.getStringWidth(setting.getName() + ": " + (isIndex ? str.substring(0, index) : str)),
+            fontRenderer.getStringWidth(setting.getDisplayName() + ": " + (listening ? str.toString() : setting.getValue())),
                     getY() + 1,
                     ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
         }
@@ -67,7 +67,7 @@ public class StringItem extends ExtendableItem{
                             "\n" +
                             ChatFormatting.RESET +
                             (setting.getDescription().isEmpty() ?
-                                    "A String setting." + ChatFormatting.GREEN + " Name" + ChatFormatting.RESET + " «" + setting.getName() + "»."
+                                    "A String setting." + ChatFormatting.GREEN + " Name" + ChatFormatting.RESET + " «" + setting.getDisplayName() + "»."
                                     : setting.getDescription());
 
             drawDesc(renderer, mouseX + 8, mouseY + 8, description);

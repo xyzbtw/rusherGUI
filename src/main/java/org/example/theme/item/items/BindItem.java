@@ -8,6 +8,7 @@ import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.feature.module.ToggleableModule;
 import org.rusherhack.client.api.render.RenderContext;
+import org.rusherhack.client.api.setting.BindSetting;
 import org.rusherhack.core.bind.IBindable;
 import org.rusherhack.core.bind.key.IKey;
 import org.rusherhack.core.setting.Setting;
@@ -40,10 +41,15 @@ public class BindItem extends ExtendableItem{
             renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), new Color(0,0,0, 70).getRGB());
         }
 
+        String displayString = moduleBind
+                ? RusherHackAPI.getBindManager().getBind((ToggleableModule) module).getDisplayLabel()
+                : setting.getDisplayValue().equalsIgnoreCase("unknown") ? "NONE" : setting.getDisplayValue();
+
+
         if (isListening) {
-            fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getName().toUpperCase() + ": Waiting" + getIdleSign(), getWidth() - 2), getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
+            fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayValue() + ": Waiting" + getIdleSign(), getWidth() - 2), getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
         } else {
-            fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getName().toUpperCase() + ": " + (setting.getDisplayValue().equalsIgnoreCase("unknown") ? "NONE" : setting.getDisplayValue()), getWidth() -2),
+            fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName() + ": " + displayString, getWidth() -2),
                     getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
         }
 
@@ -58,7 +64,7 @@ public class BindItem extends ExtendableItem{
                             "\n" +
                             ChatFormatting.RESET +
                             (setting.getDescription().isEmpty() ?
-                                    "A Bind setting." + ChatFormatting.GREEN + " Name" + ChatFormatting.RESET + " «" + setting.getName() + "»."
+                                    "A Bind setting." + ChatFormatting.GREEN + " Name" + ChatFormatting.RESET + " «" + setting.getDisplayName()+ "»."
                                     : setting.getDescription());
 
             drawDesc(renderer, mouseX + 8, mouseY + 8, description);

@@ -48,7 +48,7 @@ public class NumberItem extends ExtendableItem {
             renderer.drawRectangle(getX(), getY(), getRenderWidth(), getHeight(false), new Color(0,0,0, 70).getRGB());
         }
 
-        fontRenderer.drawText(setting.getName() + ": " + (listening ? str.toString() + getIdleSign() : setting.getValue()),
+        fontRenderer.drawText(setting.getDisplayName() + ": " + (listening ? str.toString() + getIdleSign() : setting.getValue()),
                 getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
         if (isListening) {
             setSettingFromX((float) mouseX);
@@ -66,7 +66,7 @@ public class NumberItem extends ExtendableItem {
                             "\n" +
                             ChatFormatting.RESET +
                             (setting.getDescription().isEmpty() ?
-                                    "A Number setting." + ChatFormatting.GREEN + " Name" + ChatFormatting.RESET + " «" + setting.getName() + "»."
+                                    "A Number setting." + ChatFormatting.GREEN + " Name" + ChatFormatting.RESET + " «" + setting.getDisplayName() + "»."
                                     : setting.getDescription());
 
             drawDesc(renderer, mouseX + 8, mouseY + 8, description);

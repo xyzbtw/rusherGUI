@@ -14,19 +14,9 @@ import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
 import org.rusherhack.client.api.render.font.IFontRenderer;
 import org.rusherhack.client.api.setting.BindSetting;
-import org.rusherhack.client.api.setting.ColorSetting;
-import org.rusherhack.client.api.ui.ElementBase;
-import org.rusherhack.client.api.ui.ElementHandlerBase;
-import org.rusherhack.client.api.ui.panel.IPanelItem;
-import org.rusherhack.core.setting.*;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 
-import static org.rusherhack.client.api.Globals.mc;
 
 public class ModuleItem extends ExtendableItem {
     IModule module;
@@ -125,19 +115,16 @@ public class ModuleItem extends ExtendableItem {
     @Override
     public void mouseReleased(double mouseX, double mouseY, int button) {
         super.mouseReleased(mouseX, mouseY, button);
-        if(open) subItems.forEach(frame -> frame.mouseReleased(mouseX, mouseY, button));
     }
 
     @Override
     public boolean charTyped(char character) {
-        if(open) subItems.forEach(frame -> frame.charTyped(character));
-        return false;
+        return super.charTyped(character);
     }
 
     @Override
     public boolean keyTyped(int key, int scanCode, int modifiers) {
-        if(open) subItems.forEach(frame -> frame.keyTyped(key, scanCode, modifiers));
-        return false;
+        return super.keyTyped(key, scanCode, modifiers);
     }
     protected void possibleHeightUpdate() {
         double temp = 13f;

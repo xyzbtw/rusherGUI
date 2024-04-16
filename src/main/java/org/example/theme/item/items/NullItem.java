@@ -18,7 +18,7 @@ public class NullItem extends ExtendableItem{
         super.render(context, mouseX, mouseY);
         renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), ExamplePlugin.theme.getColorSetting().getValueRGB());
 
-        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getName(), getWidth()), getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1.0);
+        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName(), getWidth()), getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1.0);
         fontRenderer.drawText("\u2022\u2022\u2022", getX() + getWidth() - fontRenderer.getStringWidth("\u2022\u2022\u2022") - 3, getY() + 1.5, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1.0);
 
         renderSubItems(context, mouseX, mouseY, subItems, open);
@@ -53,27 +53,9 @@ public class NullItem extends ExtendableItem{
             open = !open;
         }
 
-        if(open) subItems.forEach(i -> i.mouseClicked(mouseX, mouseY, button));
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    @Override
-    public void mouseReleased(double mouseX, double mouseY, int button) {
-        super.mouseReleased(mouseX, mouseY, button);
-        if(open) subItems.forEach(frame -> frame.mouseReleased(mouseX, mouseY, button));
-    }
-
-    @Override
-    public boolean charTyped(char character) {
-        if(open) subItems.forEach(frame -> frame.charTyped(character));
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(int key, int scanCode, int modifiers) {
-        if(open) subItems.forEach(frame -> frame.keyTyped(key, scanCode, modifiers));
-        return false;
-    }
 
 
 }
