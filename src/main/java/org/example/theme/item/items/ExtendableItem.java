@@ -53,11 +53,11 @@ public class ExtendableItem extends ElementBase implements IPanelItem {
     public void renderSubItems(RenderContext context, double mouseX, double mouseY, List<ExtendableItem> subItems, Boolean open) {
         if(!subItems.isEmpty() && open) {
             renderer.getMatrixStack().pushPose();
-            double height = 11.5f;
+            double height = 12f;
             for (ExtendableItem subItem : subItems) {
                 if(subItem.setting.isHidden()) continue;
 
-                subItem.setX(getX() + 15);
+                subItem.setX(getX() + 3);
                 subItem.setY(getY() + height);
 
                 subItem.render(context, mouseX, mouseY);
@@ -122,19 +122,38 @@ public class ExtendableItem extends ElementBase implements IPanelItem {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        subItems.forEach(subItem -> subItem.mouseClicked(mouseX, mouseY, button));
+        subItems.forEach(subItem -> {
+            subItem.mouseClicked(mouseX, mouseY, button);
+            subItem.subItems.forEach(subItem1 -> subItem1.mouseClicked(mouseX, mouseY, button));
+        });
         return false;
     }
 
     @Override
+    public void mouseReleased(double mouseX, double mouseY, int button) {
+        IPanelItem.super.mouseReleased(mouseX, mouseY, button);
+        subItems.forEach(subItem -> {
+            subItem.mouseReleased(mouseX, mouseY, button);
+            subItem.subItems.forEach(subItem1 -> subItem1.mouseReleased(mouseX, mouseY, button));
+        });
+    }
+
+    @Override
     public boolean charTyped(char character) {
-        subItems.forEach(subItem -> subItem.charTyped(character));
+        subItems.forEach(subItem -> {
+            subItem.charTyped(character);
+            subItem.subItems.forEach(subItem1 -> subItem1.charTyped(character));
+        });
         return false;
     }
 
     @Override
     public boolean keyTyped(int key, int scanCode, int modifiers) {
-        subItems.forEach(subItem -> subItem.keyTyped(key, scanCode, modifiers));
+        subItems.forEach(subItem -> {
+            subItem.keyTyped(key, scanCode, modifiers);
+            subItem.subItems.forEach(subItem1 -> subItem1.keyTyped(key, scanCode, modifiers));
+        });
+
         return false;
     }
     protected boolean isHovering(double mouseX, double mouseY) {
@@ -149,7 +168,6 @@ public class ExtendableItem extends ElementBase implements IPanelItem {
                 && mouseY <= panel.getY() + panel.getHeight();
     }
     public static void setClipboardString(String copyText) {
-
         try {
             mc.keyboardHandler.setClipboard(copyText);
         } catch (Exception var2) {
@@ -230,7 +248,6 @@ public class ExtendableItem extends ElementBase implements IPanelItem {
                 this.addSubItem(new ColorItem(this, module, panel, setting));
             }
         }
-        //coloritem
     }
     protected void possibleHeightUpdate() {
         double temp = 11.5f;

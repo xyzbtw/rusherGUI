@@ -19,13 +19,13 @@ public class ColorItem extends ExtendableItem{
         colorMode = ((ColorSetting) setting).getRainbowMode();
 
         // size
-        this.svPickerWidth = 100;
+        this.svPickerWidth = getWidth() - 7;
         this.svPickerHeight = 100;
 
         this.hPickerWidth = 6;
         this.hPickerHeight = 100;
 
-        this.aPickerWidth = 100;
+        this.aPickerWidth = getWidth() - 7;
         this.aPickerHeight = 6;
 
         // cursors
