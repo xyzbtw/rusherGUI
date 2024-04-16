@@ -92,7 +92,7 @@ public class ColorItem extends ExtendableItem{
 
         fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getName(), getWidth()), getX(), getY() + 2, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
         double rectScale = getHeight();
-        double rectX = getX();
+        double rectX = getX() + getWidth() - rectScale - 15;
         double rectY = (int) getCenter(getY(), getHeight(), rectScale) + 3;
 
         renderer.drawRectangle(rectX - 1.3F, rectY - 1.3F, 26, 9.5F, Color.BLACK.getRGB());
