@@ -32,7 +32,7 @@ public class EnumItem extends ExtendableItem{
             renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), new Color(0,0,0, 70).getRGB());
         }
 
-        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName() + ": " + setting.getValue(), getWidth()), getX() + 1, getY() + 1.5, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
+        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName() + ": " + setting.getDisplayValue(), getWidth()), getX() + 1, getY() + 1.5, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
 
         renderSubItems(context, mouseX, mouseY, subItems, open);
 
