@@ -1,8 +1,8 @@
 package org.parknich.theme.item.items;
 
 import net.minecraft.ChatFormatting;
-import org.parknich.theme.ExamplePlugin;
-import org.example.theme.Panel;
+import org.parknich.theme.ParkTheme;
+import org.parknich.theme.Panel;
 import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
@@ -81,13 +81,13 @@ public class ColorItem extends ExtendableItem{
         super.render(context, mouseX, mouseY);
         possibleHeightUpdate();
         double x = parent.getX() + 1.5;
-        renderer.drawRectangle(x ,getY(), getWidth(), getHeight(), ExamplePlugin.theme.getColorSetting().getValueRGB());
+        renderer.drawRectangle(x ,getY(), getWidth(), getHeight(), ParkTheme.theme.getColorSetting().getValueRGB());
 
         if(isHovering(mouseX, mouseY)) {
             renderer.drawRectangle(x, getY(), getWidth(), getHeight(), new Color(0, 0, 0, 70).getRGB());
         }
 
-        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName(), getWidth()), x + 1, getY() + 2, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
+        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName(), getWidth()), x + 1, getY() + 2, ParkTheme.theme.fontColor.getValueRGB(), getWidth(), 1);
         double rectScale = getHeight();
         double rectX = x + getWidth() - rectScale - 15;
         double rectY = (int) getCenter(getY(), getHeight(), rectScale) + 3;

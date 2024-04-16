@@ -1,8 +1,8 @@
 package org.parknich.theme.item.items;
 
 import net.minecraft.ChatFormatting;
-import org.parknich.theme.ExamplePlugin;
-import org.example.theme.Panel;
+import org.parknich.theme.ParkTheme;
+import org.parknich.theme.Panel;
 import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.render.RenderContext;
 import org.rusherhack.core.setting.Setting;
@@ -37,19 +37,19 @@ public class StringItem extends ExtendableItem{
     @Override
     public void render(RenderContext context, double mouseX, double mouseY) {
         super.render(context, mouseX, mouseY);
-        renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(false), ExamplePlugin.theme.getColorSetting().getValueRGB());
+        renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(false), ParkTheme.theme.getColorSetting().getValueRGB());
         if(isHovering(mouseX, mouseY)) {
             renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(false), new Color(0,0,0, 70).getRGB());
         }
 
 
-        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName() + ": " + (listening ? str.toString() : setting.getValue()), getWidth()), getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
+        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName() + ": " + (listening ? str.toString() : setting.getValue()), getWidth()), getX() + 1, getY() + 1, ParkTheme.theme.fontColor.getValueRGB(), getWidth(), 1);
 
         if (listening) {
             fontRenderer.drawText(getIdleSign(),
             fontRenderer.getStringWidth(setting.getDisplayName() + ": " + (listening ? str.toString() : setting.getValue())),
                     getY() + 1,
-                    ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
+                    ParkTheme.theme.fontColor.getValueRGB(), getWidth(), 1);
         }
 
         renderSubItems(context, mouseX, mouseY, subItems, open);

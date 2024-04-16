@@ -2,8 +2,8 @@ package org.parknich.theme.item.items;
 
 import lombok.Getter;
 import net.minecraft.ChatFormatting;
-import org.parknich.theme.ExamplePlugin;
-import org.example.theme.Panel;
+import org.parknich.theme.ParkTheme;
+import org.parknich.theme.Panel;
 import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.render.RenderContext;
 import org.rusherhack.core.setting.NumberSetting;
@@ -43,13 +43,13 @@ public class NumberItem extends ExtendableItem {
         open = true;
 
         setRenderWidth(getWidth() * partialMultiplier());
-        renderer.drawRectangle(getX(), getY(), getRenderWidth(), getHeight(false), ExamplePlugin.theme.getColorSetting().getValueRGB());
+        renderer.drawRectangle(getX(), getY(), getRenderWidth(), getHeight(false), ParkTheme.theme.getColorSetting().getValueRGB());
         if(isHovering(mouseX, mouseY)) {
             renderer.drawRectangle(getX(), getY(), getRenderWidth(), getHeight(false), new Color(0,0,0, 70).getRGB());
         }
 
         fontRenderer.drawText(setting.getDisplayName() + ": " + (listening ? str.toString() + getIdleSign() : setting.getValue()),
-                getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
+                getX() + 1, getY() + 1, ParkTheme.theme.fontColor.getValueRGB(), getWidth(), 1);
         if (isListening) {
             setSettingFromX((float) mouseX);
         }

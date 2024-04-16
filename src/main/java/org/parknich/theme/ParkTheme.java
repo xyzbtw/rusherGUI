@@ -11,7 +11,7 @@ import java.awt.*;
  * @author xyzbtw and hitmanqq
  */
 public class ParkTheme extends Plugin {
-	public static Theme theme = new Theme("FirstExternal", "First external theme!", new Color(148, 141, 252));
+	public static Theme theme = new Theme("ParkTheme", "parknich's Theme", new Color(148, 141, 252));
 	public static ClickGUIHandler handler;
 	
 	@Override

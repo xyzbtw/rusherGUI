@@ -1,8 +1,8 @@
 package org.parknich.theme.item.items;
 
 import net.minecraft.ChatFormatting;
-import org.parknich.theme.ExamplePlugin;
-import org.example.theme.Panel;
+import org.parknich.theme.ParkTheme;
+import org.parknich.theme.Panel;
 import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.feature.module.ToggleableModule;
@@ -33,7 +33,7 @@ public class BindItem extends ExtendableItem{
     public void render(RenderContext context, double mouseX, double mouseY) {
         super.render(context, mouseX, mouseY);
 
-        renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), ExamplePlugin.theme.getColorSetting().getValueRGB());
+        renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), ParkTheme.theme.getColorSetting().getValueRGB());
         if(isHovering(mouseX, mouseY)) {
             renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), new Color(0,0,0, 70).getRGB());
         }
@@ -44,10 +44,10 @@ public class BindItem extends ExtendableItem{
 
 
         if (isListening) {
-            fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayValue() + ": Waiting" + getIdleSign(), getWidth() - 2), getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
+            fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayValue() + ": Waiting" + getIdleSign(), getWidth() - 2), getX() + 1, getY() + 1, ParkTheme.theme.fontColor.getValueRGB(), getWidth(), 1);
         } else {
             fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName() + ": " + displayString, getWidth() -2),
-                    getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
+                    getX() + 1, getY() + 1, ParkTheme.theme.fontColor.getValueRGB(), getWidth(), 1);
         }
 
         renderSubItems(context, mouseX, mouseY, subItems, open);

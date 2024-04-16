@@ -1,7 +1,7 @@
 package org.parknich.theme.item.items;
 
-import org.parknich.theme.ExamplePlugin;
-import org.example.theme.Panel;
+import org.parknich.theme.ParkTheme;
+import org.parknich.theme.Panel;
 import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.render.RenderContext;
 import org.rusherhack.core.setting.Setting;
@@ -15,10 +15,10 @@ public class NullItem extends ExtendableItem{
     @Override
     public void render(RenderContext context, double mouseX, double mouseY) {
         super.render(context, mouseX, mouseY);
-        renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), ExamplePlugin.theme.getColorSetting().getValueRGB());
+        renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), ParkTheme.theme.getColorSetting().getValueRGB());
 
-        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName(), getWidth()), getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1.0);
-        fontRenderer.drawText("\u2022\u2022\u2022", getX() + getWidth() - fontRenderer.getStringWidth("\u2022\u2022\u2022") - 3, getY() + 1.5, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1.0);
+        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName(), getWidth()), getX() + 1, getY() + 1, ParkTheme.theme.fontColor.getValueRGB(), getWidth(), 1.0);
+        fontRenderer.drawText("\u2022\u2022\u2022", getX() + getWidth() - fontRenderer.getStringWidth("\u2022\u2022\u2022") - 3, getY() + 1.5, ParkTheme.theme.fontColor.getValueRGB(), getWidth(), 1.0);
 
         renderSubItems(context, mouseX, mouseY, subItems, open);
 

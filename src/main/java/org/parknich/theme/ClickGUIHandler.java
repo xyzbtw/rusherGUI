@@ -7,6 +7,7 @@ import org.rusherhack.client.api.feature.module.ModuleCategory;
 import org.rusherhack.client.api.render.RenderContext;
 import org.rusherhack.client.api.ui.ElementBase;
 import org.rusherhack.client.api.ui.panel.PanelHandlerBase;
+import org.rusherhack.core.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +26,7 @@ public class ClickGUIHandler extends PanelHandlerBase<ElementBase> {
         x1 = 5;
 
         Arrays.stream(ModuleCategory.values()).forEach(moduleCategory -> {
-            Panel panel = new Panel(this, moduleCategory.getName(), x1, 17);
+            Panel panel = new Panel(this, StringUtils.toTitleCase(moduleCategory.getName()), x1, 17);
             List<ModuleItem> items = new ArrayList<>();
             for(IModule module : RusherHackAPI.getModuleManager().getFeatures()) {
                 if(module.getCategory() == moduleCategory) {

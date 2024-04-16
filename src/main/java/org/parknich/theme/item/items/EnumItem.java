@@ -1,8 +1,8 @@
 package org.parknich.theme.item.items;
 
 import net.minecraft.ChatFormatting;
-import org.parknich.theme.ExamplePlugin;
-import org.example.theme.Panel;
+import org.parknich.theme.ParkTheme;
+import org.parknich.theme.Panel;
 import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.render.RenderContext;
 import org.rusherhack.core.setting.Setting;
@@ -27,12 +27,12 @@ public class EnumItem extends ExtendableItem{
     @Override
     public void render(RenderContext context, double mouseX, double mouseY) {
         super.render(context, mouseX, mouseY);
-        renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), ExamplePlugin.theme.getColorSetting().getValueRGB());
+        renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), ParkTheme.theme.getColorSetting().getValueRGB());
         if(isHovering(mouseX, mouseY)) {
             renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), new Color(0,0,0, 70).getRGB());
         }
 
-        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName() + ": " + setting.getValue(), getWidth()), getX() + 1, getY() + 1.5, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
+        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName() + ": " + setting.getValue(), getWidth()), getX() + 1, getY() + 1.5, ParkTheme.theme.fontColor.getValueRGB(), getWidth(), 1);
 
         renderSubItems(context, mouseX, mouseY, subItems, open);
 

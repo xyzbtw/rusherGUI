@@ -36,7 +36,7 @@ public class Theme extends ThemeBase {
 
     @Override
     public @Nullable PanelHandlerBase<?> getClickGuiHandler() {
-        return ExamplePlugin.handler;
+        return ParkTheme.handler;
     }
 
 }

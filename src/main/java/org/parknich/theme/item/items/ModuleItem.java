@@ -1,8 +1,8 @@
 package org.parknich.theme.item.items;
 
 import net.minecraft.ChatFormatting;
-import org.parknich.theme.ExamplePlugin;
-import org.example.theme.Panel;
+import org.parknich.theme.ParkTheme;
+import org.parknich.theme.Panel;
 import org.lwjgl.glfw.GLFW;
 import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.module.IModule;
@@ -67,14 +67,14 @@ public class ModuleItem extends ExtendableItem {
 
         if(module instanceof ToggleableModule){
             if(((ToggleableModule) module).isToggled())
-                renderer.drawOutlinedRectangle(getX(), getY() - 1, getWidth(), getHeight(false) + 1, 4, ExamplePlugin.theme.getColorSetting().getValue().getRGB(), ExamplePlugin.theme.moduleOutlineColor.getValueRGB());
+                renderer.drawOutlinedRectangle(getX(), getY() - 1, getWidth(), getHeight(false) + 1, 4, ParkTheme.theme.getColorSetting().getValue().getRGB(), ParkTheme.theme.moduleOutlineColor.getValueRGB());
         }
         else{
-            renderer.drawRectangle(getX(), getY() - 1, getWidth(), getHeight(false) + 1, ExamplePlugin.theme.getColorSetting().getValue().getRGB());
+            renderer.drawRectangle(getX(), getY() - 1, getWidth(), getHeight(false) + 1, ParkTheme.theme.getColorSetting().getValue().getRGB());
         }
 
-        if(ExamplePlugin.theme.settingsOutline.getValue() && open){
-            renderer.drawOutlinedRectangle(getX(), getY() + getHeight(false), getWidth(), getHeight(true) - getHeight(false), 2.5f, new Color(0,0,0,0.5f).getRGB(), ExamplePlugin.theme.outlineColor.getValueRGB());
+        if(ParkTheme.theme.settingsOutline.getValue() && open){
+            renderer.drawOutlinedRectangle(getX(), getY() + getHeight(false), getWidth(), getHeight(true) - getHeight(false), 2.5f, new Color(0,0,0,0.5f).getRGB(), ParkTheme.theme.outlineColor.getValueRGB());
         }
 
         renderSubItems(context, mouseX, mouseY, subItems, open);
@@ -92,7 +92,7 @@ public class ModuleItem extends ExtendableItem {
 
         fontRenderer.drawText(module.getName(), getX() + 3.5f,
                 (panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight(false)) ? getY() + 1f : 2.5F + getY()),
-                ExamplePlugin.theme.fontColor.getValue().getRGB(), getWidth(), 1);
+                ParkTheme.theme.fontColor.getValue().getRGB(), getWidth(), 1);
     }
 
     @Override

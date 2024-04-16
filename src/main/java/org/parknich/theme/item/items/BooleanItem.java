@@ -1,7 +1,7 @@
 package org.parknich.theme.item.items;
 
-import org.parknich.theme.ExamplePlugin;
-import org.example.theme.Panel;
+import org.parknich.theme.ParkTheme;
+import org.parknich.theme.Panel;
 import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.render.IRenderer2D;
@@ -36,7 +36,7 @@ public class BooleanItem extends ExtendableItem {
         IRenderer2D renderer = RusherHackAPI.getRenderer2D();
 
         renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), setting.getValue()
-                ? ExamplePlugin.theme.getColorSetting().getValue().getRGB()
+                ? ParkTheme.theme.getColorSetting().getValue().getRGB()
                 : new Color(0, 0, 0, 50).getRGB());
 
         if(panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight())) {
@@ -45,7 +45,7 @@ public class BooleanItem extends ExtendableItem {
 
         renderSubItems(context, mouseX, mouseY, subItems, open);
 
-        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName(), getWidth()), getX() + 1, getY() + 1.5, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
+        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName(), getWidth()), getX() + 1, getY() + 1.5, ParkTheme.theme.fontColor.getValueRGB(), getWidth(), 1);
 
     }
     @Override

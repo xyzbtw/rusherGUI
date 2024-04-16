@@ -45,6 +45,7 @@ public class Panel extends PanelBase<IPanelItem> {
     @Getter
     private List<ModuleItem> moduleItems;
     private final String category;
+    
 
     @Override
     public void render(RenderContext context, double mouseX, double mouseY) {
@@ -56,10 +57,11 @@ public class Panel extends PanelBase<IPanelItem> {
         double y = getY();
         final IRenderer2D renderer = RusherHackAPI.getRenderer2D();
         double height = this.getHeight();
-        renderer.drawRectangle(x, y - 14.5f, getWidth(),14.5, ParkTheme.theme.categoryColor.getValueRGB());
+        //renderer.drawRectangle(x, y - 7.5f, getWidth(),7.5, ParkTheme.theme.categoryColor.getValueRGB());
+        renderer._drawRoundedRectangle(x, y - 11.5f, getWidth(),11.5, 3.0f, true, true, 1.0f, ParkTheme.theme.categoryColor.getValueRGB(), ParkTheme.theme.categoryColor.getValueRGB());
+
         double offsetX = (getWidth() - renderer.getFontRenderer().getStringWidth(category)) / 2F;
         getFontRenderer().drawString(category, x + offsetX, y -  14.5/2 - 3, ParkTheme.theme.fontColor.getValue().getRGB());
-
 
         if(open) {
             if (height > 0) {

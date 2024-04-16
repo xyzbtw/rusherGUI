@@ -99,7 +99,7 @@ tasks.register("moveJar", Exec){
 			'copy',
 			'/Y',
 			'build\\libs\\rushergui-1.0.0.jar',
-			'C:\\Users\\xyzbtw\\AppData\\Roaming\\PrismLauncher\\instances\\1.20.1 test\\.minecraft\\rusherhack\\plugins'
+			'E:\\MultiMC\\instances\\Anarchy 1.20.4\\.minecraft\\rusherhack\\plugins'
 	println "Copied jar file to destination folder with replacement"
 }
 

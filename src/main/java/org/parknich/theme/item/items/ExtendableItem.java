@@ -2,8 +2,8 @@ package org.parknich.theme.item.items;
 
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.util.Tuple;
-import org.parknich.theme.ExamplePlugin;
-import org.example.theme.Panel;
+import org.parknich.theme.ParkTheme;
+import org.parknich.theme.Panel;
 import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.render.IRenderer2D;
@@ -98,7 +98,7 @@ public class ExtendableItem extends ElementBase implements IPanelItem {
             mesh2D.drawRectangle(x0 - 0.5F, y - 0.5F, maxWidth + 0.5F, offset, new Color(0, 0, 0, 200).getRGB());
 
             for (Tuple<Float, String> pair : pairs) {
-                fontRenderer.drawString(pair.getB(), x0, y + pair.getA() - 1F, ExamplePlugin.theme.fontColor.getValue().getRGB());
+                fontRenderer.drawString(pair.getB(), x0, y + pair.getA() - 1F, ParkTheme.theme.fontColor.getValue().getRGB());
             }
             mesh2D.getMatrixStack().popPose();
         };
