@@ -22,24 +22,22 @@ public class EnumItem extends ExtendableItem{
     private boolean open = false;
 
 
-    public EnumItem(ModuleItem parent, IModule module, Panel panel, Setting<?> settingValue) {
+    public EnumItem(ExtendableItem parent, IModule module, Panel panel, Setting<?> settingValue) {
         super(parent, module, panel, settingValue);
     }
 
-    @Override
-    public double getX() {
-        return super.getX() + 1.5;
-    }
 
     @Override
     public void render(RenderContext context, double mouseX, double mouseY) {
-
+        super.render(context, mouseX, mouseY);
         renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), ExamplePlugin.theme.getColorSetting().getValueRGB());
-        if(isHovered(mouseX, mouseY)) {
-            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), new Color(0,0,0, ExamplePlugin.theme.hoverAlpha.getValue()).getRGB());
+        if(isHovering(mouseX, mouseY)) {
+            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), new Color(0,0,0, 70).getRGB());
         }
-        fontRenderer.drawString(setting.getName() + ": " + setting.getValue(), getX() + 1, getY() + 1.5, ExamplePlugin.theme.fontColor.getValueRGB());
 
+        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getName() + ": " + setting.getValue(), getWidth()), getX() + 1, getY() + 1.5, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
+
+        renderSubItems(context, mouseX, mouseY, subItems, open);
 
         if (isHovering(mouseX, mouseY)) {
             String description =
@@ -55,6 +53,10 @@ public class EnumItem extends ExtendableItem{
 
             drawDesc(renderer, mouseX + 8, mouseY + 8, description);
         }
+    }
+    @Override
+    public double getX() {
+        return parent.getX() + 1.5;
     }
 
     public void next() {
@@ -117,4 +119,32 @@ public class EnumItem extends ExtendableItem{
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
+    @Override
+    public boolean charTyped(char character) {
+        return super.charTyped(character);
+    }
+
+    @Override
+    public boolean keyTyped(int key, int scanCode, int modifiers) {
+        return super.keyTyped(key, scanCode, modifiers);
+    }
+
+    @Override
+    public void mouseReleased(double mouseX, double mouseY, int button) {
+        super.mouseReleased(mouseX, mouseY, button);
+    }
+    @Override
+    public double getY() {
+        return super.getY();
+    }
+
+    @Override
+    public double getWidth() {
+        return super.getWidth();
+    }
+
+    @Override
+    public double getHeight() {
+        return super.getHeight();
+    }
 }

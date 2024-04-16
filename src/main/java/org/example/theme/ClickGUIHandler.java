@@ -5,10 +5,13 @@ import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.feature.module.ModuleCategory;
 import org.rusherhack.client.api.feature.module.ToggleableModule;
+import org.rusherhack.client.api.render.RenderContext;
 import org.rusherhack.client.api.ui.ElementBase;
 import org.rusherhack.client.api.ui.panel.PanelHandlerBase;
 
 import java.util.*;
+
+import static org.example.theme.Panel.run;
 
 public class ClickGUIHandler extends PanelHandlerBase<ElementBase> {
     public ClickGUIHandler(boolean scaledWithMinecraftGui) {
@@ -62,5 +65,12 @@ public class ClickGUIHandler extends PanelHandlerBase<ElementBase> {
 
     }
 
-
+    @Override
+    public void render(RenderContext context, double mouseX, double mouseY) {
+        super.render(context, mouseX, mouseY);
+        if(run != null) {
+            run.run();
+            run = null;
+        }
+    }
 }

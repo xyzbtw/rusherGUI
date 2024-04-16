@@ -30,7 +30,7 @@ public class StringItem extends ExtendableItem{
     private StringBuilder str = new StringBuilder();
     private final List<StringBuilder> ctrlz = new LinkedList<>();
 
-    public StringItem(ModuleItem parent, IModule module, Panel panel, Setting<?> setting) {
+    public StringItem(ExtendableItem parent, IModule module, Panel panel, Setting<?> setting) {
         super(parent, module, panel, setting);
         ctrlz.add(new StringBuilder((String) (Objects.equals(setting.getValue(), "") ? setting.getDefaultValue() : setting.getValue())));
         ctrlz.add(str);
@@ -40,20 +40,24 @@ public class StringItem extends ExtendableItem{
 
     @Override
     public void render(RenderContext context, double mouseX, double mouseY) {
+        super.render(context, mouseX, mouseY);
         renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(false), ExamplePlugin.theme.getColorSetting().getValueRGB());
         if(isHovering(mouseX, mouseY)) {
-            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(false), new Color(0,0,0, ExamplePlugin.theme.hoverAlpha.getValue()).getRGB());
+            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(false), new Color(0,0,0, 70).getRGB());
         }
 
 
-        fontRenderer.drawString(setting.getName() + ": " + (listening ? str.toString() : setting.getValue()), getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB());
+        fontRenderer.drawText(setting.getName() + ": " + (listening ? str.toString() : setting.getValue()), getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
 
         if (listening) {
-            fontRenderer.drawString(getIdleSign(),
+            fontRenderer.drawText(getIdleSign(),
             fontRenderer.getStringWidth(setting.getName() + ": " + (isIndex ? str.substring(0, index) : str)),
                     getY() + 1,
-                    ExamplePlugin.theme.fontColor.getValueRGB());
+                    ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
         }
+
+        renderSubItems(context, mouseX, mouseY, subItems, open);
+
         if (isHovering(mouseX, mouseY)) {
             String description =
                     ChatFormatting.GREEN +
@@ -69,7 +73,10 @@ public class StringItem extends ExtendableItem{
             drawDesc(renderer, mouseX + 8, mouseY + 8, description);
         }
     }
-
+    @Override
+    public double getX() {
+        return parent.getX() + 1.5;
+    }
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (isHovering(mouseX, mouseY)) {
@@ -104,6 +111,20 @@ public class StringItem extends ExtendableItem{
         }
         return "";
     }
+    @Override
+    public double getY() {
+        return super.getY();
+    }
+
+    @Override
+    public double getWidth() {
+        return super.getWidth();
+    }
+
+    @Override
+    public double getHeight() {
+        return super.getHeight();
+    }
 
     @Override
     public boolean keyTyped(int keyCode, int scanCode, int modifiers) {
@@ -133,6 +154,11 @@ public class StringItem extends ExtendableItem{
                 case GLFW_KEY_DELETE -> str.setLength(0);
             }
         return super.keyTyped(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public void mouseReleased(double mouseX, double mouseY, int button) {
+        super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override

@@ -6,7 +6,9 @@ import org.example.theme.Panel;
 import org.rusherhack.client.api.IRusherHack;
 import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.module.IModule;
+import org.rusherhack.client.api.feature.module.ToggleableModule;
 import org.rusherhack.client.api.render.RenderContext;
+import org.rusherhack.core.bind.IBindable;
 import org.rusherhack.core.bind.key.IKey;
 import org.rusherhack.core.setting.Setting;
 import org.rusherhack.core.utils.Timer;
@@ -19,37 +21,40 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_UNKNOWN;
 public class BindItem extends ExtendableItem{
     public boolean isListening = false;
     private final Timer idleTimer = new Timer();
+    private boolean moduleBind = false;
     private int idling = 0;
     private static final String[] strings = new String[]{"", ".", "..", "..."};
 
-    public BindItem(ModuleItem parent, IModule module, Panel panel, Setting<?> settingValue) {
+    public BindItem(ExtendableItem parent, IModule module, Panel panel, Setting<?> settingValue, Boolean moduleBind) {
         super(parent, module, panel, settingValue);
-    }
-    @Override
-    public double getX() {
-        return super.getX() + 1.5;
+        this.moduleBind = moduleBind;
+        open = true;
     }
 
     @Override
     public void render(RenderContext context, double mouseX, double mouseY) {
-        System.out.println("rendering bindthign");
+        super.render(context, mouseX, mouseY);
 
         renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), ExamplePlugin.theme.getColorSetting().getValueRGB());
-        if(isHovered(mouseX, mouseY)) {
-            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), new Color(0,0,0, ExamplePlugin.theme.hoverAlpha.getValue()).getRGB());
+        if(isHovering(mouseX, mouseY)) {
+            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), new Color(0,0,0, 70).getRGB());
         }
 
         if (isListening) {
-            fontRenderer.drawString(setting.getName() + ": Waiting" + getIdleSign(), getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB());
+            fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getName().toUpperCase() + ": Waiting" + getIdleSign(), getWidth() - 2), getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
         } else {
-            fontRenderer.drawString(setting.getName() + ": " + (setting.getDisplayValue().equalsIgnoreCase("unknown") ? "NONE" : setting.getDisplayValue()), getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB());
+            fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getName().toUpperCase() + ": " + (setting.getDisplayValue().equalsIgnoreCase("unknown") ? "NONE" : setting.getDisplayValue()), getWidth() -2),
+                    getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
         }
+
+        renderSubItems(context, mouseX, mouseY, subItems, open);
+
         if (isHovering(mouseX, mouseY)) {
             String description =
                     ChatFormatting.GREEN +
                             "Value " +
                             ChatFormatting.RESET +
-                            "«" + (isListening ? "Waiting" + getIdleSign() : setting.getValue().toString()) + "»." +
+                            "«" + (isListening ? "Waiting" + getIdleSign() : setting.getDisplayValue()) + "»." +
                             "\n" +
                             ChatFormatting.RESET +
                             (setting.getDescription().isEmpty() ?
@@ -60,6 +65,25 @@ public class BindItem extends ExtendableItem{
         }
 
 
+    }
+
+    @Override
+    public double getX() {
+        return parent.getX() + 1.5;
+    }
+    @Override
+    public double getY() {
+        return super.getY();
+    }
+
+    @Override
+    public double getWidth() {
+        return super.getWidth();
+    }
+
+    @Override
+    public double getHeight() {
+        return super.getHeight();
     }
 
     @Override
@@ -74,6 +98,8 @@ public class BindItem extends ExtendableItem{
                 bind = RusherHackAPI.getBindManager().createKeyboardKey(GLFW_KEY_UNKNOWN);
             }
             setting.setValue(bind);
+            if(moduleBind)
+                RusherHackAPI.getBindManager().setBind((IBindable) module, bind);
             isListening = false;
         }
         return super.keyTyped(key, scanCode, modifiers);
@@ -82,12 +108,15 @@ public class BindItem extends ExtendableItem{
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+
         if (!isHovering(mouseX, mouseY)) {
             return false;
         }
 
         if (isListening) {
             setting.setValue(RusherHackAPI.getBindManager().createMouseKey(button));
+            if(moduleBind)
+                RusherHackAPI.getBindManager().setBind((IBindable) module, RusherHackAPI.getBindManager().createMouseKey(button));
             isListening = false;
         } else {
             if (button == GLFW_MOUSE_BUTTON_LEFT) {

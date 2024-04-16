@@ -16,7 +16,6 @@ import org.rusherhack.core.animation.Animation;
 import java.awt.*;
 import java.util.List;
 
-import static org.rusherhack.client.api.Globals.mc;
 
 
 public class Panel extends PanelBase<IPanelItem> {
@@ -26,12 +25,11 @@ public class Panel extends PanelBase<IPanelItem> {
         setX(x);
         setY(y);
     }
-
+    @Setter
+    public static Runnable run;
     @Setter
     @Getter
     private double scroll;
-    @Getter
-    private double modulesHeight;
     private double diffX;
     private double diffY;
 
@@ -45,12 +43,8 @@ public class Panel extends PanelBase<IPanelItem> {
     @Setter
     @Getter
     private double prevY;
-    private double renderYModule;
     @Setter
     private boolean open = true, drag = false;
-    //        scrollHeight = (float) (getModuleItems().stream()
-    //                .mapToDouble(frame -> frame.getHeight(false) + .5)
-    //                .sum());
     @Setter
     @Getter
     private List<ModuleItem> moduleItems;
@@ -68,7 +62,7 @@ public class Panel extends PanelBase<IPanelItem> {
         double height = this.getHeight();
         renderer.drawRectangle(x, y - 14.5f, getWidth(),14.5, new Color(0, 0, 0, 100).getRGB());
         double offsetX = (getWidth() - renderer.getFontRenderer().getStringWidth(category)) / 2F;
-        renderer.getFontRenderer().drawString(category, x + offsetX, y - 6 - 2.5F, ExamplePlugin.theme.fontColor.getValue().getRGB());
+        getFontRenderer().drawString(category, x + offsetX, y -  14.5/2 - 3, ExamplePlugin.theme.fontColor.getValue().getRGB());
 
 
         if(open) {
@@ -158,20 +152,5 @@ public class Panel extends PanelBase<IPanelItem> {
         if (open) moduleItems.forEach(frame -> frame.keyTyped(key, scanCode, modifiers));
         return false;
     }
-
-    public void setRenderYModule(double y) {
-        if (this.renderYModule == y) return;
-        prevYModule = this.renderYModule;
-        this.renderYModule = y;
-    }
-
-    public double getRenderYModule() {
-        if (mc.getFps() < 20) {
-            return renderYModule;
-        }
-        renderYModule = prevYModule + (renderYModule - prevYModule) * mc.getDeltaFrameTime() / (8 * (Math.min(240, mc.getFps()) / 240f));
-        return renderYModule;
-    }
-
 
 }

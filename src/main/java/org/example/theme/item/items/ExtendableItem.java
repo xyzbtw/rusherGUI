@@ -10,9 +10,10 @@ import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
 import org.rusherhack.client.api.render.font.IFontRenderer;
+import org.rusherhack.client.api.setting.BindSetting;
 import org.rusherhack.client.api.ui.ElementBase;
 import org.rusherhack.client.api.ui.panel.IPanelItem;
-import org.rusherhack.core.setting.Setting;
+import org.rusherhack.core.setting.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -25,84 +26,114 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
 import static org.rusherhack.client.api.Globals.mc;
 
 public class ExtendableItem extends ElementBase implements IPanelItem {
-    ModuleItem parent;
+    ExtendableItem parent;
     IModule module;
     Panel panel;
     Setting setting;
-    public double mouseX = 0, mouseY = 0;
+    public double mouseX = 0, mouseY = 0, rendererHeight = 11F;
+    public boolean open;
     public  IRenderer2D renderer = RusherHackAPI.getRenderer2D();
     public IFontRenderer fontRenderer = RusherHackAPI.fonts().getFontRenderer();
-    public ExtendableItem(ModuleItem parent, IModule module, Panel panel, Setting<?> settingValue) {
+    public List<ExtendableItem> subItems = new ArrayList<>();
+    public ExtendableItem(ExtendableItem parent, IModule module, Panel panel, Setting<?> settingValue) {
         this.parent = parent;
         this.module = module;
         this.panel = panel;
         this.setting = settingValue;
+        if(setting!=null && !setting.getSubSettings().isEmpty())
+            addSettingItems(setting.getSubSettings());
     }
     @Override
     public void render(RenderContext context, double mouseX, double mouseY) {
+        possibleHeightUpdate();
         this.mouseY = mouseY;
         this.mouseX = mouseX;
+    }
+    public void renderSubItems(RenderContext context, double mouseX, double mouseY, List<ExtendableItem> subItems, Boolean open) {
+        if(!subItems.isEmpty() && open) {
+            renderer.getMatrixStack().pushPose();
+            double height = 11.5f;
+            for (ExtendableItem subItem : subItems) {
+                if(subItem.setting.isHidden()) continue;
+
+                subItem.setX(getX() + 15);
+                subItem.setY(getY() + height);
+
+                subItem.render(context, mouseX, mouseY);
+                height += subItem.getHeight(true) + 0.5F;
+            }
+            renderer.getMatrixStack().popPose();
+        }
     }
 
     @Override
     public double getWidth() {
-        return parent.getWidth() - 3;
+        return parent.getWidth() - 1;
     }
 
     @Override
     public double getHeight(boolean total) {
+        if(total){
+            return rendererHeight;
+        }
         return 11;
     }
     public void drawDesc(IRenderer2D mesh2D, double x, double y, String text) {
-        mesh2D.getMatrixStack().pushPose();
-        mesh2D.getMatrixStack().translate(0F, 0F, 200F);
-        IFontRenderer fontRenderer = RusherHackAPI.fonts().getFontRenderer();
-        List<Tuple<Float, String>> pairs = new ArrayList<>();
-        String[] lines = text.split("\n");
-        float offset = 0;
-        for (String s : lines) {
-            pairs.add(new Tuple<>(offset, s));
-            offset += (float) fontRenderer.getFontHeight();
-        }
-        double maxWidth = Arrays.stream(lines)
-                .map(fontRenderer::getStringWidth)
-                .max(Comparator.comparing(i -> i)).orElse(0.0);
-        double diff = Math.max(0, x + maxWidth - mc.getWindow().getGuiScaledWidth());
-        double x0 = x - (diff + (diff > 0 ? 1F : 0F));
-        mesh2D.drawRectangle(x0 - 0.5F, y - 0.5F, maxWidth + 0.5F, offset, new Color(0, 0, 0, 50).getRGB());
+        Runnable runnable = () -> {
+            mesh2D.getMatrixStack().pushPose();
+            mesh2D.getMatrixStack().translate(0F, 0F, 200F);
+            IFontRenderer fontRenderer = RusherHackAPI.fonts().getFontRenderer();
+            List<Tuple<Float, String>> pairs = new ArrayList<>();
+            String[] lines = text.split("\n");
+            float offset = 0;
+            for (String s : lines) {
+                pairs.add(new Tuple<>(offset, s));
+                offset += (float) fontRenderer.getFontHeight() + 0.3f;
+            }
+            double maxWidth = Arrays.stream(lines)
+                    .map(fontRenderer::getStringWidth)
+                    .max(Comparator.comparing(i -> i)).orElse(0.0);
+            double diff = Math.max(0, x + maxWidth - mc.getWindow().getGuiScaledWidth());
+            double x0 = x - (diff + (diff > 0 ? 1F : 0F));
+            mesh2D.drawRectangle(x0 - 0.5F, y - 0.5F, maxWidth + 0.5F, offset, new Color(0, 0, 0, 200).getRGB());
 
-        for (Tuple<Float, String> pair : pairs) {
-            fontRenderer.drawString(pair.getB(), x0, y + pair.getA() - 1F, ExamplePlugin.theme.fontColor.getValue().getRGB());
-        }
-        mesh2D.getMatrixStack().popPose();
+            for (Tuple<Float, String> pair : pairs) {
+                fontRenderer.drawString(pair.getB(), x0, y + pair.getA() - 1F, ExamplePlugin.theme.fontColor.getValue().getRGB());
+            }
+            mesh2D.getMatrixStack().popPose();
+        };
+        Panel.setRun(runnable);
     }
     @Override
     public double getX(){
-        return super.getX() + 1.5;
+        return panel.getX() + 1.5;
     }
 
     @Override
     public boolean isHovered(double mouseX, double mouseY, boolean includeSubItems) {
-        return false;
+        return isHovering(mouseX, mouseY);
     }
 
     @Override
     public double getHeight() {
-        return 11;
+        return getHeight(false);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        subItems.forEach(subItem -> subItem.mouseClicked(mouseX, mouseY, button));
         return false;
     }
 
     @Override
     public boolean charTyped(char character) {
+        subItems.forEach(subItem -> subItem.charTyped(character));
         return false;
     }
 
     @Override
     public boolean keyTyped(int key, int scanCode, int modifiers) {
+        subItems.forEach(subItem -> subItem.keyTyped(key, scanCode, modifiers));
         return false;
     }
     protected boolean isHovering(double mouseX, double mouseY) {
@@ -166,4 +197,42 @@ public class ExtendableItem extends ElementBase implements IPanelItem {
                 && mouseY >= panel.getY()
                 && mouseY <= panel.getY() + panel.getHeight();
     }
+    public void addSubItem(ExtendableItem item) {
+        this.subItems.add(item);
+    }
+    public void addSettingItems(List<Setting<?>> settings) {
+        for(Setting<?> setting : settings) {
+            if(setting instanceof BooleanSetting) {
+                this.addSubItem(new BooleanItem(this.module, this.panel, this, (BooleanSetting) setting));
+            }
+            else if(setting instanceof StringSetting) {
+                //string settings can either act like enum settings, or be configurable strings
+                if (!((StringSetting) setting).getOptions().isEmpty()) {
+                    this.addSubItem(new EnumItem(this, module, panel, setting));
+                } else {
+                    this.addSubItem(new StringItem(this, module, panel, setting));
+                }
+            }
+            else if(setting instanceof EnumSetting<?>){
+                this.addSubItem(new EnumItem(this, module, panel, setting));
+            }
+            else if(setting instanceof BindSetting){
+                this.addSubItem(new BindItem(this, module, panel, setting, false));
+            }
+            else if(setting instanceof NumberSetting<?>){
+                this.addSubItem(new NumberItem(this, module, panel, setting));
+            }
+            else if(setting instanceof NullSetting){
+                this.addSubItem(new NullItem(this, module, panel, setting));
+            }
+        }
+        //coloritem
+    }
+    protected void possibleHeightUpdate() {
+        double temp = 11.5f;
+        if (open)
+            temp += subItems.stream().mapToDouble(i -> i.setting.isHidden() ? 0 : (i.getHeight(true) + 0.5f)).sum();
+        rendererHeight = temp;
+    }
+
 }

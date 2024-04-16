@@ -28,35 +28,34 @@ public class NumberItem extends ExtendableItem {
     @Getter
     private double renderWidth;
     private int count;
-    double mousex = 0, mousey = 0;
 
-    public NumberItem(ModuleItem parent, IModule module, Panel panel, Setting<?> settingValue) {
+    public NumberItem(ExtendableItem parent, IModule module, Panel panel, Setting<?> settingValue) {
         super(parent, module, panel, settingValue);
         ctrlz.add(new StringBuilder(setting.getValue().toString()));
         ctrlz.add(str);
         count = ctrlz.size() - 1;
     }
 
-    @Override
-    public double getX() {
-        return super.getX() + 1.5;
-    }
 
     @Override
     public void render(RenderContext context, double mouseX, double mouseY) {
-        this.mousex = mouseX;
-        this.mousey = mouseY;
+        super.render(context, mouseX, mouseY);
+        open = true;
 
         setRenderWidth(getWidth() * partialMultiplier());
-        renderer.drawRectangle(getX(), getY(), getRenderWidth(), getHeight(), ExamplePlugin.theme.getColorSetting().getValueRGB());
+        renderer.drawRectangle(getX(), getY(), getRenderWidth(), getHeight(false), ExamplePlugin.theme.getColorSetting().getValueRGB());
         if(isHovering(mouseX, mouseY)) {
-            renderer.drawRectangle(getX(), getY(), getRenderWidth(), getHeight(), new Color(0,0,0, 50).getRGB());
+            renderer.drawRectangle(getX(), getY(), getRenderWidth(), getHeight(false), new Color(0,0,0, 70).getRGB());
         }
 
-        fontRenderer.drawString(setting.getName() + ": " + (listening ? str.toString() + getIdleSign() : setting.getValue()), getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB());
+        fontRenderer.drawText(setting.getName() + ": " + (listening ? str.toString() + getIdleSign() : setting.getValue()),
+                getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
         if (isListening) {
             setSettingFromX((float) mouseX);
         }
+
+        renderSubItems(context, mouseX, mouseY, subItems, open);
+
         if (isHovering(mouseX, mouseY)) {
             String description =
                     ChatFormatting.GREEN +
@@ -72,15 +71,19 @@ public class NumberItem extends ExtendableItem {
 
             drawDesc(renderer, mouseX + 8, mouseY + 8, description);
         }
+    }
 
+    @Override
+    public double getX() {
+        return parent.getX() + 1.5;
     }
 
     @Override
     public void mouseReleased(double mouseX, double mouseY, int button) {
+        super.mouseReleased(mouseX, mouseY, button);
         if (button == GLFW_MOUSE_BUTTON_LEFT) {
             isListening = false;
         }
-        super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
@@ -197,24 +200,41 @@ public class NumberItem extends ExtendableItem {
         } catch (Throwable ignored) {
         }
     }
+    @Override
+    public double getY() {
+        return super.getY();
+    }
+
+    @Override
+    public double getWidth() {
+        return super.getWidth();
+    }
+
+    @Override
+    public double getHeight() {
+        return super.getHeight();
+    }
 
     private void setSettingFromX(float mouseX) {
         if (setting instanceof NumberSetting<?> num) {
             if (num.getValue() instanceof Double) {
                 double min = (double) num.getMinimum();
                 double max = (double) num.getMaximum();
+                double step = (max - min) / getWidth();
                 double newValue = (mouseX - getX()) * (max - min) / getWidth() + min;
-                num.setValue(MathUtils.clamp(roundDouble(roundToStep(newValue, (double) num.incremental(2).getValue()), 2), min, max));
+                num.setValue(MathUtils.clamp(roundDouble(roundToStep(newValue, step), 2), min, max));
             } else if (num.getValue() instanceof Float) {
                 float min = (float) num.getMinimum();
                 float max = (float) num.getMaximum();
+                double step = (max - min) / getWidth();
                 float newValue = (float) (((mouseX - (getX())) * (max - min)) / getWidth() + min);
-                num.setValue(MathUtils.clamp(roundFloat(roundToStep(newValue, (float) num.incremental(2).getValue()), 2), min, max));
+                num.setValue(MathUtils.clamp(roundFloat(roundToStep(newValue, (float) step), 2), min, max));
             } else if (num.getValue() instanceof Integer) {
                 int min = (int) num.getMinimum();
                 int max = (int) num.getMaximum();
+                double step = (max - min) / getWidth();
                 float newValue = (float) (((mouseX - (getX())) * (max - min)) / getWidth() + min);
-                num.setValue(MathUtils.clamp(roundFloat(roundToStep(newValue, (float) num.incremental(2).getValue()), 2), min, max));
+                num.setValue(MathUtils.clamp(roundFloat(roundToStep(newValue, (float) step), 2), min, max));
             }
         }
     }

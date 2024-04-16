@@ -14,7 +14,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class BooleanItem extends ExtendableItem {
-    public BooleanItem(IModule module, Panel panel, ModuleItem parent, BooleanSetting setting) {
+    public BooleanItem(IModule module, Panel panel, ExtendableItem parent, BooleanSetting setting) {
         super(parent, module, panel, setting);
         this.panel = panel;
         this.module = module;
@@ -23,32 +23,19 @@ public class BooleanItem extends ExtendableItem {
     Panel panel;
     IModule module;
     BooleanSetting setting;
-    @Override
-    public double getWidth() {
-        return parent.getWidth() - 3;
-    }
 
-    @Override
-    public double getHeight(boolean total) {
-        return 11;
-    }
-    @Override
-    public double getX(){
-        return super.getX() + 1.5;
-    }
+
 
     @Override
     public boolean isHovered(double mouseX, double mouseY, boolean includeSubItems) {
         return false;
     }
 
-    @Override
-    public double getHeight() {
-        return 11;
-    }
 
     @Override
     public void render(RenderContext context, double mouseX, double mouseY) {
+        super.render(context, mouseX, mouseY);
+        open = setting.getValue();
         IRenderer2D renderer = RusherHackAPI.getRenderer2D();
 
         renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), setting.getValue()
@@ -56,30 +43,45 @@ public class BooleanItem extends ExtendableItem {
                 : new Color(0, 0, 0, 50).getRGB());
 
         if(panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight())) {
-            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), new Color(0, 0, 0, 100).getRGB());
+            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), new Color(0, 0, 0, 70).getRGB());
         }
 
-        renderer.getFontRenderer().drawString(setting.getName(), getX() + 1, getY() + 2.5, ExamplePlugin.theme.fontColor.getValueRGB());
+        renderSubItems(context, mouseX, mouseY, subItems, open);
 
+        fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getName(), getWidth()), getX() + 1, getY() + 2.5, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
+
+    }
+    @Override
+    public double getX() {
+        return parent.getX() + 1.5;
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if(button == 0){
             if(panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight())) {
+                System.out.println("PRE " + setting.getValue());
                 setting.setValue(!setting.getValue());
+                System.out.println("POST " + setting.getValue());
             }
         }
+
         return false;
     }
 
     @Override
-    public boolean charTyped(char character) {
-        return false;
+    public double getY() {
+        return super.getY();
     }
 
     @Override
-    public boolean keyTyped(int key, int scanCode, int modifiers) {
-        return false;
+    public double getWidth() {
+        return super.getWidth();
     }
+
+    @Override
+    public double getHeight() {
+        return super.getHeight();
+    }
+
 }

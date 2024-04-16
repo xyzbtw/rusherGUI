@@ -28,16 +28,20 @@ import java.util.List;
 
 import static org.rusherhack.client.api.Globals.mc;
 
-public class ModuleItem extends ElementBase implements IPanelItem {
+public class ModuleItem extends ExtendableItem {
     IModule module;
     Panel panel;
     public boolean open = false;
-    private final ArrayList<ExtendableItem> subItems = new ArrayList<>();
     private double rendererHeight;
 
     public ModuleItem(IModule module, Panel panel){
+        super(null, module, panel, null);
         this.module = module;
         this.panel = panel;
+
+        if(module instanceof ToggleableModule) {
+            addSubItem(new BindItem(this, module, panel, new BindSetting("Bind", RusherHackAPI.getBindManager().getBind((ToggleableModule) module)), true));
+        }
 
         addSettingItems(module.getSettings());
 
@@ -70,37 +74,27 @@ public class ModuleItem extends ElementBase implements IPanelItem {
 
     @Override
     public void render(RenderContext context, double mouseX, double mouseY) {
+        super.render(context, mouseX, mouseY);
         final IRenderer2D renderer = RusherHackAPI.getRenderer2D();
         final IFontRenderer fontRenderer = RusherHackAPI.fonts().getFontRenderer();
-        possibleHeightUpdate();
 
         if(module instanceof ToggleableModule){
             if(((ToggleableModule) module).isToggled())
-                renderer.drawOutlinedRectangle(getX(), getY(), getWidth(), getHeight(false), 3, ExamplePlugin.theme.getColorSetting().getValue().getRGB(), ExamplePlugin.theme.moduleOutlineColor.getValueRGB());
+                renderer.drawOutlinedRectangle(getX(), getY() - 1, getWidth(), getHeight(false) + 1, 4, ExamplePlugin.theme.getColorSetting().getValue().getRGB(), ExamplePlugin.theme.moduleOutlineColor.getValueRGB());
         }
         else{
-            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(false), ExamplePlugin.theme.getColorSetting().getValue().getRGB());
+            renderer.drawRectangle(getX(), getY() - 1, getWidth(), getHeight(false) + 1, ExamplePlugin.theme.getColorSetting().getValue().getRGB());
         }
 
-
-
-        if(!subItems.isEmpty() && open) {
-            renderer.getMatrixStack().pushPose();
-            double height = 11.5f;
-            for (ExtendableItem subItem : subItems) {
-                if(subItem.setting.isHidden()) continue;
-
-                subItem.setX(getX());
-                subItem.setY(getY() + height);
-
-                subItem.render(context, mouseX, mouseY);
-                height += subItem.getHeight(true) + 0.5F;
-            }
-            renderer.getMatrixStack().popPose();
+        if(ExamplePlugin.theme.settingsOutline.getValue() && open){
+            renderer.drawOutlinedRectangle(getX(), getY() + getHeight(false), getWidth(), getHeight(true) - getHeight(false), 2.5f, new Color(0,0,0,0.5f).getRGB(), ExamplePlugin.theme.outlineColor.getValueRGB());
         }
+
+        renderSubItems(context, mouseX, mouseY, subItems, open);
+
 
         if(panel.isHovering(mouseX,mouseY, getX(), getY(), getWidth(), getHeight(false))) {
-            renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(false), new Color(0, 0, 0, 50).getRGB());
+            renderer.drawRectangle(getX(), getY() - 1, getWidth(), getHeight(false) + 1, new Color(0, 0, 0, 70).getRGB());
             String description =
                     (module.getDescription().isEmpty() ?
                             "A " + module.getCategory() +" Module." + ChatFormatting.GREEN + " Name" + ChatFormatting.RESET + " «" +  module.getName() + "»."
@@ -109,30 +103,9 @@ public class ModuleItem extends ElementBase implements IPanelItem {
             drawDesc(renderer, mouseX + 8,mouseY + 8, description);
         }
 
-        fontRenderer.drawString(module.getName(), getX() + 3.5f, (panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight(false)) ? getY() + 1f : 2.5F + getY()), ExamplePlugin.theme.fontColor.getValue().getRGB());
-    }
-    public void drawDesc(IRenderer2D mesh2D, double x, double y, String text) {
-        mesh2D.getMatrixStack().pushPose();
-        mesh2D.getMatrixStack().translate(0F, 0F, 200F);
-        IFontRenderer fontRenderer = RusherHackAPI.fonts().getFontRenderer();
-        List<Tuple<Float, String>> pairs = new ArrayList<>();
-        String[] lines = text.split("\n");
-        float offset = 0;
-        for (String s : lines) {
-            pairs.add(new Tuple<>(offset, s));
-            offset += (float) mesh2D.getFontRenderer().getFontHeight();
-        }
-        double maxWidth = Arrays.stream(lines)
-                .map(fontRenderer::getStringWidth)
-                .max(Comparator.comparing(i -> i)).orElse(0.0);
-        double diff = Math.max(0, x + maxWidth - mc.getWindow().getGuiScaledWidth());
-        double x0 = x - (diff + (diff > 0 ? 1F : 0F));
-        mesh2D.drawRectangle(x0 - 0.5F, y - 0.5F, maxWidth + 0.5F, offset, new Color(0, 0, 0, 50).getRGB());
-
-        for (Tuple<Float, String> pair : pairs) {
-            fontRenderer.drawString(pair.getB(), x0, y + pair.getA() - 1F, ExamplePlugin.theme.fontColor.getValue().getRGB());
-        }
-        mesh2D.getMatrixStack().popPose();
+        fontRenderer.drawText(module.getName(), getX() + 3.5f,
+                (panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight(false)) ? getY() + 1f : 2.5F + getY()),
+                ExamplePlugin.theme.fontColor.getValue().getRGB(), getWidth(), 1);
     }
 
     @Override
@@ -145,26 +118,25 @@ public class ModuleItem extends ElementBase implements IPanelItem {
         }
         if (button == GLFW.GLFW_MOUSE_BUTTON_2 && panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight(false))) {
             this.open = !this.open;
-            possibleHeightUpdate();
         }
         return false;
     }
 
     @Override
     public void mouseReleased(double mouseX, double mouseY, int button) {
-        if(open) subItems.forEach(frame -> frame.mouseReleased(mouseX, mouseY, button));
-        IPanelItem.super.mouseReleased(mouseX, mouseY, button);
+        super.mouseReleased(mouseX, mouseY, button);
+        //if(open) subItems.forEach(frame -> frame.mouseReleased(mouseX, mouseY, button));
     }
 
     @Override
     public boolean charTyped(char character) {
-        if(open) subItems.forEach(frame -> frame.charTyped(character));
+        //if(open) subItems.forEach(frame -> frame.charTyped(character));
         return false;
     }
 
     @Override
     public boolean keyTyped(int key, int scanCode, int modifiers) {
-        if(open) subItems.forEach(frame -> frame.keyTyped(key, scanCode, modifiers));
+       // if(open) subItems.forEach(frame -> frame.keyTyped(key, scanCode, modifiers));
         return false;
     }
     protected void possibleHeightUpdate() {
@@ -172,38 +144,5 @@ public class ModuleItem extends ElementBase implements IPanelItem {
         if (open)
             temp += subItems.stream().mapToDouble(i -> i.setting.isHidden() ? 0 : (i.getHeight(true) + 0.5f)).sum();
         rendererHeight = temp;
-    }
-    public void addSettingItems(List<Setting<?>> settings) {
-        for(Setting<?> setting : settings) {
-            if(setting instanceof BooleanSetting) {
-                this.addSubItem(new BooleanItem(this.module, this.panel, this, (BooleanSetting) setting));
-            }
-            else if(setting instanceof StringSetting) {
-                //string settings can either act like enum settings, or be configurable strings
-                if (!((StringSetting) setting).getOptions().isEmpty()) {
-                    this.addSubItem(new EnumItem(this, module, panel, setting));
-                } else {
-                    this.addSubItem(new StringItem(this, module, panel, setting));
-                }
-            }
-            else if(setting instanceof EnumSetting<?>){
-                this.addSubItem(new EnumItem(this, module, panel, setting));
-            }
-            else if(setting instanceof BindSetting){
-                System.out.println("registered bindsetting for module " + module.getName());
-                this.addSubItem(new BindItem(this, module, panel, setting));
-            }
-            else if(setting instanceof NumberSetting<?>){
-                this.addSubItem(new NumberItem(this, module, panel, setting));
-            }
-//            } else if(setting instanceof ColorSetting) {
-//                this.addSubItem(new ClassicColorItem(this.getPanel(), this, (ColorSetting) setting));
-//            } else if(setting instanceof NullSetting) {
-//                this.addSubItem(new ClassicSettingItem<>(this.getPanel(), this, (NullSetting) setting));
-//            }
-        }
-    }
-    public void addSubItem(ExtendableItem item) {
-        this.subItems.add(item);
     }
 }
