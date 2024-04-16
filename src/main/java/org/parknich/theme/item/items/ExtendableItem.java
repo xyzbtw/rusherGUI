@@ -1,8 +1,8 @@
-package org.example.theme.item.items;
+package org.parknich.theme.item.items;
 
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.util.Tuple;
-import org.example.theme.ExamplePlugin;
+import org.parknich.theme.ExamplePlugin;
 import org.example.theme.Panel;
 import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.module.IModule;

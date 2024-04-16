@@ -1,8 +1,8 @@
-package org.example.theme;
+package org.parknich.theme;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.example.theme.item.items.ModuleItem;
+import org.parknich.theme.item.items.ModuleItem;
 import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
@@ -56,16 +56,16 @@ public class Panel extends PanelBase<IPanelItem> {
         double y = getY();
         final IRenderer2D renderer = RusherHackAPI.getRenderer2D();
         double height = this.getHeight();
-        renderer.drawRectangle(x, y - 14.5f, getWidth(),14.5, ExamplePlugin.theme.categoryColor.getValueRGB());
+        renderer.drawRectangle(x, y - 14.5f, getWidth(),14.5, ParkTheme.theme.categoryColor.getValueRGB());
         double offsetX = (getWidth() - renderer.getFontRenderer().getStringWidth(category)) / 2F;
-        getFontRenderer().drawString(category, x + offsetX, y -  14.5/2 - 3, ExamplePlugin.theme.fontColor.getValue().getRGB());
+        getFontRenderer().drawString(category, x + offsetX, y -  14.5/2 - 3, ParkTheme.theme.fontColor.getValue().getRGB());
 
 
         if(open) {
             if (height > 0) {
-                renderer.drawOutlinedRectangle(x, y, getWidth(), height + 1.5F, ExamplePlugin.theme.outlineWidth.getValue(),
-                        ExamplePlugin.theme.backColor.getValueRGB(),
-                        ExamplePlugin.theme.outlineColor.getValueRGB());
+                renderer.drawOutlinedRectangle(x, y, getWidth(), height + 1.5F, ParkTheme.theme.outlineWidth.getValue(),
+                        ParkTheme.theme.backColor.getValueRGB(),
+                        ParkTheme.theme.outlineColor.getValueRGB());
             }
             double y0 = y + 1.5F;
             if (height > 0) {
@@ -99,7 +99,7 @@ public class Panel extends PanelBase<IPanelItem> {
         if (open) moduleItems.forEach(frame -> frame.mouseClicked(mouseX, mouseY, button));
         if (isHovering(mouseX, mouseY, getX(), getY() - 14.5F, getWidth(), 14.5F)) {
             if (button == 0) {
-                ExamplePlugin.theme.getClickGuiHandler().getElements().forEach(element -> drag = false);
+                ParkTheme.theme.getClickGuiHandler().getElements().forEach(element -> drag = false);
                 diffX = getX() - mouseX;
                 diffY = getY() - mouseY;
                 drag = true;
@@ -122,9 +122,9 @@ public class Panel extends PanelBase<IPanelItem> {
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         //if(isHovering(mouseX, mouseY, getX(), getY() - 14.5F, getWidth(), getHeight())) {
             if(delta >= 0) {
-                setY(getY() + ExamplePlugin.theme.scrollSpeed.getValue());
+                setY(getY() + ParkTheme.theme.scrollSpeed.getValue());
             } else {
-                setY(getY() - ExamplePlugin.theme.scrollSpeed.getValue());
+                setY(getY() - ParkTheme.theme.scrollSpeed.getValue());
             }
      //   }
         return false;

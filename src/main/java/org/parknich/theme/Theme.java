@@ -1,4 +1,4 @@
-package org.example.theme;
+package org.parknich.theme;
 
 import org.jetbrains.annotations.Nullable;
 import org.rusherhack.client.api.setting.ColorSetting;

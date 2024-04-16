@@ -1,4 +1,4 @@
-package org.example.theme;
+package org.parknich.theme;
 
 import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.plugin.Plugin;
@@ -10,7 +10,7 @@ import java.awt.*;
  *
  * @author xyzbtw and hitmanqq
  */
-public class ExamplePlugin extends Plugin {
+public class ParkTheme extends Plugin {
 	public static Theme theme = new Theme("FirstExternal", "First external theme!", new Color(148, 141, 252));
 	public static ClickGUIHandler handler;
 	

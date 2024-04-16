@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.example.theme.Panel.run;
+import static org.parknich.theme.Panel.run;
 
 public class ClickGUIHandler extends PanelHandlerBase<ElementBase> {
     public ClickGUIHandler(boolean scaledWithMinecraftGui) {
