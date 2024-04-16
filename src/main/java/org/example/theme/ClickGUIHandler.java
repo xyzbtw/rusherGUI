@@ -7,6 +7,7 @@ import org.rusherhack.client.api.feature.module.ModuleCategory;
 import org.rusherhack.client.api.render.RenderContext;
 import org.rusherhack.client.api.ui.ElementBase;
 import org.rusherhack.client.api.ui.panel.PanelHandlerBase;
+import org.rusherhack.core.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +15,7 @@ import java.util.List;
 
 import static org.example.theme.Panel.run;
 
-public class ClickGUIHandler extends PanelHandlerBase<ElementBase> {
+public class ClickGUIHandler extends PanelHandlerBase<Panel> {
     public ClickGUIHandler(boolean scaledWithMinecraftGui) {
         super(scaledWithMinecraftGui);
     }
