@@ -125,18 +125,18 @@ public class ModuleItem extends ExtendableItem {
     @Override
     public void mouseReleased(double mouseX, double mouseY, int button) {
         super.mouseReleased(mouseX, mouseY, button);
-        //if(open) subItems.forEach(frame -> frame.mouseReleased(mouseX, mouseY, button));
+        if(open) subItems.forEach(frame -> frame.mouseReleased(mouseX, mouseY, button));
     }
 
     @Override
     public boolean charTyped(char character) {
-        //if(open) subItems.forEach(frame -> frame.charTyped(character));
+        if(open) subItems.forEach(frame -> frame.charTyped(character));
         return false;
     }
 
     @Override
     public boolean keyTyped(int key, int scanCode, int modifiers) {
-       // if(open) subItems.forEach(frame -> frame.keyTyped(key, scanCode, modifiers));
+        if(open) subItems.forEach(frame -> frame.keyTyped(key, scanCode, modifiers));
         return false;
     }
     protected void possibleHeightUpdate() {

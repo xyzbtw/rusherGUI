@@ -11,6 +11,7 @@ import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
 import org.rusherhack.client.api.render.font.IFontRenderer;
 import org.rusherhack.client.api.setting.BindSetting;
+import org.rusherhack.client.api.setting.ColorSetting;
 import org.rusherhack.client.api.ui.ElementBase;
 import org.rusherhack.client.api.ui.panel.IPanelItem;
 import org.rusherhack.core.setting.*;
@@ -224,6 +225,9 @@ public class ExtendableItem extends ElementBase implements IPanelItem {
             }
             else if(setting instanceof NullSetting){
                 this.addSubItem(new NullItem(this, module, panel, setting));
+            }
+            else if(setting instanceof ColorSetting){
+                this.addSubItem(new ColorItem(this, module, panel, setting));
             }
         }
         //coloritem

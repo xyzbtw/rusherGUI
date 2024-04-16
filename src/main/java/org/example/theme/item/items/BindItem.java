@@ -108,7 +108,6 @@ public class BindItem extends ExtendableItem{
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-
         if (!isHovering(mouseX, mouseY)) {
             return false;
         }
