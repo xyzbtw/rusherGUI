@@ -1,11 +1,10 @@
 {
-  "Plugin-Class": "org.example.theme.ExamplePlugin",
-  "Name": "First external theme",
+  "Plugin-Class": "org.parknich.theme.ParkTheme",
+  "Name": "ParkTheme",
   "Version": "${plugin_version}",
-  "Description": "An example theme.",
+  "Description": "parknich's theme",
   "Authors": [
-    "xyzbtw",
-    "hitmanqq"
+    "parknich"
   ],
   "Minecraft-Versions": [
     "1.20.1",

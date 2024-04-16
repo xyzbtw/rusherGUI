@@ -1,6 +1,6 @@
-package org.example.theme;
+package org.parknich.theme;
 
-import org.example.theme.item.items.ModuleItem;
+import org.parknich.theme.item.items.ModuleItem;
 import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.feature.module.ModuleCategory;
