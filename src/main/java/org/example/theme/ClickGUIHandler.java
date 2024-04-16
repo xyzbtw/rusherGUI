@@ -4,12 +4,13 @@ import org.example.theme.item.items.ModuleItem;
 import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.feature.module.ModuleCategory;
-import org.rusherhack.client.api.feature.module.ToggleableModule;
 import org.rusherhack.client.api.render.RenderContext;
 import org.rusherhack.client.api.ui.ElementBase;
 import org.rusherhack.client.api.ui.panel.PanelHandlerBase;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.example.theme.Panel.run;
 
@@ -35,7 +36,6 @@ public class ClickGUIHandler extends PanelHandlerBase<ElementBase> {
 
             panel.setModuleItems(items);
             addPanel(panel);
-            System.out.println("Added new panel " + panel.getName());
             x1 += panel.getWidth() + 6;
         });
 

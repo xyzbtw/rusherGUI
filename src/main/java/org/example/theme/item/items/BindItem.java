@@ -3,12 +3,10 @@ package org.example.theme.item.items;
 import net.minecraft.ChatFormatting;
 import org.example.theme.ExamplePlugin;
 import org.example.theme.Panel;
-import org.rusherhack.client.api.IRusherHack;
 import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.feature.module.ToggleableModule;
 import org.rusherhack.client.api.render.RenderContext;
-import org.rusherhack.client.api.setting.BindSetting;
 import org.rusherhack.core.bind.IBindable;
 import org.rusherhack.core.bind.key.IKey;
 import org.rusherhack.core.setting.Setting;
@@ -17,7 +15,6 @@ import org.rusherhack.core.utils.Timer;
 import java.awt.*;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_UNKNOWN;
 
 public class BindItem extends ExtendableItem{
     public boolean isListening = false;

@@ -1,9 +1,6 @@
 package org.example.theme.item.items;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.minecraft.ChatFormatting;
-import net.minecraft.util.Tuple;
 import org.example.theme.ExamplePlugin;
 import org.example.theme.Panel;
 import org.lwjgl.glfw.GLFW;

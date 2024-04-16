@@ -4,16 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.theme.item.items.ModuleItem;
 import org.rusherhack.client.api.RusherHackAPI;
-import org.rusherhack.client.api.feature.module.ModuleCategory;
 import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
-import org.rusherhack.client.api.ui.ElementHandlerBase;
 import org.rusherhack.client.api.ui.panel.IPanelItem;
 import org.rusherhack.client.api.ui.panel.PanelBase;
 import org.rusherhack.client.api.ui.panel.PanelHandlerBase;
-import org.rusherhack.core.animation.Animation;
 
-import java.awt.*;
 import java.util.List;
 
 

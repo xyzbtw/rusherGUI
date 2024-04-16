@@ -8,7 +8,6 @@ import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
 import org.rusherhack.client.api.setting.ColorSetting;
 import org.rusherhack.core.setting.Setting;
-import org.rusherhack.core.utils.ColorUtils;
 
 import java.awt.*;
 import java.util.regex.Matcher;
@@ -87,7 +86,6 @@ public class ColorItem extends ExtendableItem{
         if(isHovering(mouseX, mouseY)) {
             renderer.drawRectangle(x, getY(), getWidth(), getHeight(), new Color(0, 0, 0, 70).getRGB());
         }
-
 
         fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName(), getWidth()), x + 1, getY() + 2, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
         double rectScale = getHeight();

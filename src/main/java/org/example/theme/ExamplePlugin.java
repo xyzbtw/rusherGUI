@@ -8,10 +8,10 @@ import java.awt.*;
 /**
  * Example rusherhack plugin
  *
- * @author John200410
+ * @author xyzbtw and hitmanqq
  */
 public class ExamplePlugin extends Plugin {
-	public static Theme theme = new Theme("testtheme", "testtheme", new Color(148, 141, 252));
+	public static Theme theme = new Theme("FirstExternal", "First external theme!", new Color(148, 141, 252));
 	public static ClickGUIHandler handler;
 	
 	@Override

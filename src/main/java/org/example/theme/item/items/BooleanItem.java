@@ -6,12 +6,9 @@ import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
-import org.rusherhack.client.api.ui.ElementBase;
-import org.rusherhack.client.api.ui.panel.IPanelItem;
 import org.rusherhack.core.setting.BooleanSetting;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class BooleanItem extends ExtendableItem {
     public BooleanItem(IModule module, Panel panel, ExtendableItem parent, BooleanSetting setting) {

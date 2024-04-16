@@ -3,12 +3,9 @@ package org.example.theme.item.items;
 import net.minecraft.ChatFormatting;
 import org.example.theme.ExamplePlugin;
 import org.example.theme.Panel;
-import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.module.IModule;
-import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
 import org.rusherhack.core.setting.Setting;
-import org.rusherhack.core.setting.StringSetting;
 import org.rusherhack.core.utils.Timer;
 
 import java.awt.*;
@@ -17,7 +14,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_DELETE;
 import static org.rusherhack.client.api.Globals.mc;
 
 

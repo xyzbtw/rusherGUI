@@ -4,7 +4,6 @@ import org.example.theme.ExamplePlugin;
 import org.example.theme.Panel;
 import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.render.RenderContext;
-import org.rusherhack.core.setting.NullSetting;
 import org.rusherhack.core.setting.Setting;
 
 public class NullItem extends ExtendableItem{

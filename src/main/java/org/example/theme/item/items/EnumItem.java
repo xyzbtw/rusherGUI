@@ -3,16 +3,13 @@ package org.example.theme.item.items;
 import net.minecraft.ChatFormatting;
 import org.example.theme.ExamplePlugin;
 import org.example.theme.Panel;
-import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.module.IModule;
-import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
 import org.rusherhack.core.setting.Setting;
 import org.rusherhack.core.setting.StringSetting;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 

@@ -5,7 +5,6 @@ import net.minecraft.util.Tuple;
 import org.example.theme.ExamplePlugin;
 import org.example.theme.Panel;
 import org.rusherhack.client.api.RusherHackAPI;
-import org.rusherhack.client.api.feature.command.arg.SettingValue;
 import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
@@ -17,7 +16,9 @@ import org.rusherhack.client.api.ui.panel.IPanelItem;
 import org.rusherhack.core.setting.*;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_R;
