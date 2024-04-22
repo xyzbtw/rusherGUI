@@ -6,6 +6,7 @@ import org.example.theme.Panel;
 import org.lwjgl.glfw.GLFW;
 import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.feature.module.IModule;
+import org.rusherhack.client.api.feature.module.Module;
 import org.rusherhack.client.api.feature.module.ToggleableModule;
 import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
@@ -67,10 +68,10 @@ public class ModuleItem extends ExtendableItem {
 
         if(module instanceof ToggleableModule){
             if(((ToggleableModule) module).isToggled())
-                renderer.drawOutlinedRectangle(getX(), getY() - 1, getWidth(), getHeight(false) + 1, 4, ExamplePlugin.theme.getColorSetting().getValue().getRGB(), ExamplePlugin.theme.moduleOutlineColor.getValueRGB());
+                renderer.drawOutlinedRectangle(getX(), getY() - 1, getWidth(), getHeight(false) + 1, ExamplePlugin.theme.outlineWidth.getValue(), ExamplePlugin.theme.getColorSetting().getValue().getRGB(), ExamplePlugin.theme.moduleOutlineColor.getValueRGB());
         }
         else{
-            renderer.drawRectangle(getX(), getY() - 1, getWidth(), getHeight(false) + 1, ExamplePlugin.theme.getColorSetting().getValue().getRGB());
+            renderer.drawOutlinedRectangle(getX(), getY() - 1, getWidth(), getHeight(false) + 1, ExamplePlugin.theme.outlineWidth.getValue(), ExamplePlugin.theme.getColorSetting().getValue().getRGB(), ExamplePlugin.theme.moduleOutlineColor.getValueRGB());
         }
 
         if(ExamplePlugin.theme.settingsOutline.getValue() && open){
