@@ -11,7 +11,6 @@ import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
 import org.rusherhack.client.api.render.font.IFontRenderer;
 import org.rusherhack.client.api.setting.BindSetting;
-import org.rusherhack.core.notification.NotificationType;
 
 import java.awt.*;
 
@@ -102,10 +101,6 @@ public class ModuleItem extends ExtendableItem {
         if (button == GLFW.GLFW_MOUSE_BUTTON_1 && panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight(false))) {
             if(module instanceof ToggleableModule){
                 ((ToggleableModule) module).toggle();
-                if(((ToggleableModule) module).isToggled())
-                    module.sendNotification(NotificationType.INFO, "Enabled");
-                else
-                    module.sendNotification(NotificationType.INFO, "Disabled");
             }
         }
         if (button == GLFW.GLFW_MOUSE_BUTTON_2 && panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight(false))) {

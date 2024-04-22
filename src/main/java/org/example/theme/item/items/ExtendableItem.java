@@ -16,7 +16,9 @@ import org.rusherhack.client.api.ui.panel.IPanelItem;
 import org.rusherhack.core.setting.*;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_R;
