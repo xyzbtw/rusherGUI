@@ -16,7 +16,6 @@ import java.util.List;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class EnumItem extends ExtendableItem{
-    private boolean open = false;
 
 
     public EnumItem(ExtendableItem parent, IModule module, Panel panel, Setting<?> settingValue) {
@@ -99,18 +98,14 @@ public class EnumItem extends ExtendableItem{
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         switch (button) {
             case GLFW_MOUSE_BUTTON_LEFT -> {
-                if (isHovering(mouseX, mouseY)) {
+                if (isHovering(mouseX, mouseY) && parent.open) {
                     next();
                 }
             }
             case GLFW_MOUSE_BUTTON_RIGHT -> {
-                if (isHovering(mouseX, mouseY)) {
+                if (isHovering(mouseX, mouseY) && parent.open) {
                     previous();
                 }
-            }
-            case GLFW_MOUSE_BUTTON_MIDDLE -> {
-                if( !isHovering(mouseX, mouseY)) return false;
-                open = !open;
             }
         }
         return super.mouseClicked(mouseX, mouseY, button);

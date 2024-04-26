@@ -88,6 +88,7 @@ public class NumberItem extends ExtendableItem {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if(!parent.open) return false;
         if (isHovering(mouseX, mouseY) && button == GLFW_MOUSE_BUTTON_LEFT) {
             isListening = true;
         }
@@ -103,6 +104,7 @@ public class NumberItem extends ExtendableItem {
 
     @Override
     public boolean keyTyped(int key, int scanCode, int modifiers) {
+        if(!parent.open) return false;
         if (isCopy(key) && (listening || isHovering(mouseX, mouseY))) {
             String text = wrapString("Number" + genPrefix(), listening ? str.toString() : setting.getValue().toString());
             setClipboardString(text);

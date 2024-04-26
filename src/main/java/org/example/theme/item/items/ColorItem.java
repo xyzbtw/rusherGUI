@@ -98,7 +98,7 @@ public class ColorItem extends ExtendableItem{
 
 
 
-        if (open || getHeight() > 11) {
+        if (isOpenPicker || getHeight() > 11) {
             Color c = ((ColorSetting) this.setting).getValue();
             double pickerX = x + 1.5F;
             double pickerY = this.getY() + this.getHeight();
@@ -250,6 +250,7 @@ public class ColorItem extends ExtendableItem{
 
     @Override
     public boolean keyTyped(int keyCode, int scanCode, int modifiers) {
+        if(!parent.open) return false;
         if (isCopy(keyCode) && isHovering(mouseX, mouseY, getX(), getY(), getX() + getWidth(), getY() + getHeight())) {
 
             setClipboardString("ColorItem[" +
@@ -289,7 +290,7 @@ public class ColorItem extends ExtendableItem{
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (open) {
+        if (isOpenPicker) {
             if (button == 0) {
                 if (isHovering(mouseX, mouseY, svPickerX, svPickerY, svPickerX + svPickerWidth, svPickerY + svPickerHeight)) {
                     svChanging = true;
@@ -304,7 +305,7 @@ public class ColorItem extends ExtendableItem{
         }
 
         if (isHovering(mouseX, mouseY) && !setting.isHidden() && (button == 0 || button == 1)) {
-            open = !open;
+            isOpenPicker = !isOpenPicker;
         }
 
         return super.mouseClicked(mouseX, mouseY, button);
@@ -335,6 +336,7 @@ public class ColorItem extends ExtendableItem{
     }
     @Override
     public void mouseReleased(double mouseX, double mouseY, int button) {
+        if(!open) return;
         if (open) {
             svChanging = false;
             hChanging = false;
@@ -351,7 +353,7 @@ public class ColorItem extends ExtendableItem{
     }
     protected void possibleHeightUpdate() {
         double temp;
-        if (open) {
+        if (isOpenPicker) {
             double l = !small ? 114F : 102.5F;
             temp = l - getHeight(false);
         } else {

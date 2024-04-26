@@ -9,6 +9,7 @@ import org.rusherhack.core.setting.Setting;
 public class NullItem extends ExtendableItem{
     public NullItem(ExtendableItem parent, IModule module, Panel panel, Setting<?> settingValue) {
         super(parent, module, panel, settingValue);
+        open = false;
     }
 
 
@@ -48,7 +49,7 @@ public class NullItem extends ExtendableItem{
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if(isHovering(mouseX, mouseY) && button == 1) {
+        if(isHovering(mouseX, mouseY) && button == 1 && parent.open) {
             open = !open;
         }
 

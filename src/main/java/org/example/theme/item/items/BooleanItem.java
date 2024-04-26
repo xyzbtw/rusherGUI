@@ -55,7 +55,7 @@ public class BooleanItem extends ExtendableItem {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if(button == 0){
+        if(button == 0 && parent.open){
             if(panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight())) {
                 setting.setValue(!setting.getValue());
             }

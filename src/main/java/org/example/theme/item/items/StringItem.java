@@ -75,6 +75,7 @@ public class StringItem extends ExtendableItem{
     }
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if(!parent.open) return false;
         if (isHovering(mouseX, mouseY)) {
             if (button == GLFW_MOUSE_BUTTON_LEFT || button == GLFW_MOUSE_BUTTON_RIGHT) {
                 if (listening) {
@@ -150,11 +151,6 @@ public class StringItem extends ExtendableItem{
                 case GLFW_KEY_DELETE -> str.setLength(0);
             }
         return super.keyTyped(keyCode, scanCode, modifiers);
-    }
-
-    @Override
-    public void mouseReleased(double mouseX, double mouseY, int button) {
-        super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override

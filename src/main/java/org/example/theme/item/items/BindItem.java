@@ -91,6 +91,7 @@ public class BindItem extends ExtendableItem{
 
     @Override
     public boolean keyTyped(int key, int scanCode, int modifiers) {
+        if(!open) return false;
         if (isListening) {
             IKey bind = RusherHackAPI.getBindManager().createKeyboardKey(key);
             if (key == GLFW_KEY_ESCAPE
@@ -111,6 +112,7 @@ public class BindItem extends ExtendableItem{
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if(!parent.open) return false;
         if (!isHovering(mouseX, mouseY)) {
             return false;
         }
