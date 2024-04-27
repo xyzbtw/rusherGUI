@@ -32,7 +32,6 @@ public class BooleanItem extends ExtendableItem {
     @Override
     public void render(RenderContext context, double mouseX, double mouseY) {
         super.render(context, mouseX, mouseY);
-        open = setting.getValue();
         IRenderer2D renderer = RusherHackAPI.getRenderer2D();
 
         renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), setting.getValue()
@@ -47,6 +46,9 @@ public class BooleanItem extends ExtendableItem {
 
         fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName(), getWidth()), getX() + 1, getY() + 1.5, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1);
 
+        if(!subItems.isEmpty()){
+            fontRenderer.drawText(get3Dots(), getX() + getWidth() - fontRenderer.getStringWidth(get3Dots()) - 3, getY() + 1.5, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1.0);
+        }
     }
     @Override
     public double getX() {
@@ -59,6 +61,9 @@ public class BooleanItem extends ExtendableItem {
             if(panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight())) {
                 setting.setValue(!setting.getValue());
             }
+        }
+        if(button == 1 && parent.open && panel.isHovering(mouseX, mouseY, getX(), getY(), getWidth(), getHeight())) {
+            open = !open;
         }
 
         return super.mouseClicked(mouseX, mouseY, button);

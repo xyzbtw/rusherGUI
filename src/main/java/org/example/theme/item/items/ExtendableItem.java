@@ -214,6 +214,9 @@ public class ExtendableItem extends ElementBase implements IPanelItem {
     public void addSubItem(ExtendableItem item) {
         this.subItems.add(item);
     }
+    public String get3Dots(){
+        return open ? "\u2022" :  "\u2022\u2022\u2022";
+    }
     public void addSettingItems(List<Setting<?>> settings) {
         for(Setting<?> setting : settings) {
             if(setting instanceof BooleanSetting) {

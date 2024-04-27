@@ -19,7 +19,7 @@ public class NullItem extends ExtendableItem{
         renderer.drawRectangle(getX(), getY(), getWidth(), getHeight(), ExamplePlugin.theme.getColorSetting().getValueRGB());
 
         fontRenderer.drawText(fontRenderer.trimStringToWidth(setting.getDisplayName(), getWidth()), getX() + 1, getY() + 1, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1.0);
-        fontRenderer.drawText("\u2022\u2022\u2022", getX() + getWidth() - fontRenderer.getStringWidth("\u2022\u2022\u2022") - 3, getY() + 1.5, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1.0);
+        fontRenderer.drawText(get3Dots(), getX() + getWidth() - fontRenderer.getStringWidth(get3Dots()) - 3, getY() + 1.5, ExamplePlugin.theme.fontColor.getValueRGB(), getWidth(), 1.0);
 
         renderSubItems(context, mouseX, mouseY, subItems, open);
 
