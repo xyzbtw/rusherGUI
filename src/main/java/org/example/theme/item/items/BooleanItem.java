@@ -16,6 +16,7 @@ public class BooleanItem extends ExtendableItem {
         this.panel = panel;
         this.module = module;
         this.setting = setting;
+        open = false;
     }
     Panel panel;
     IModule module;

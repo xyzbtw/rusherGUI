@@ -19,6 +19,12 @@ public class ClickGUIHandler extends PanelHandlerBase<Panel> {
     public ClickGUIHandler(boolean scaledWithMinecraftGui) {
         super(scaledWithMinecraftGui);
     }
+
+    @Override
+    public Panel createPanel(String name) {
+        return new Panel(this, name, x1, 17);
+    }
+
     private double x1;
 
     @Override
@@ -37,7 +43,7 @@ public class ClickGUIHandler extends PanelHandlerBase<Panel> {
 
             panel.setModuleItems(items);
             addPanel(panel);
-            x1 += panel.getWidth() + 6;
+            x1 += panel.getWidth() + 2;
         });
 
         List<ModuleItem> pluginModules = new ArrayList<>();

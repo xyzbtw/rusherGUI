@@ -4,11 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.theme.item.items.ModuleItem;
 import org.rusherhack.client.api.RusherHackAPI;
+import org.rusherhack.client.api.feature.module.IModule;
 import org.rusherhack.client.api.render.IRenderer2D;
 import org.rusherhack.client.api.render.RenderContext;
 import org.rusherhack.client.api.ui.panel.IPanelItem;
 import org.rusherhack.client.api.ui.panel.PanelBase;
 import org.rusherhack.client.api.ui.panel.PanelHandlerBase;
+import org.rusherhack.core.feature.IFeature;
 
 import java.util.List;
 
@@ -149,4 +151,11 @@ public class Panel extends PanelBase<IPanelItem> {
         return false;
     }
 
+    @Override
+    public IPanelItem createFeatureItem(IFeature feature) {
+        if(feature instanceof IModule module) {
+            return new ModuleItem(module, this);
+        }
+        return null;
+    }
 }
